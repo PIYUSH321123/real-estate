@@ -1,94 +1,183 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { Mail, Phone, MapPin, Heart } from "lucide-react"
-import { useCompany } from "@/components/marketing/CompanyContext"
+import * as React from "react";
+import Link from "next/link";
+import { Mail, Phone, MapPin, Building2, ShieldCheck, ExternalLink, ArrowRight } from "lucide-react";
+import { useCompany } from "@/components/marketing/CompanyContext";
+import { SITE_CONFIG } from "@/config/site-config";
 
 export default function Footer() {
-    const { company, getLinkWithCompany } = useCompany()
+  const { company } = useCompany();
+  const companySlug = company?.slug && company.slug !== "dashboard" ? company.slug : "gharsetu";
 
-    return (
-        <footer className="bg-gray-900 text-gray-400 py-16 border-t border-gray-800">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                    {/* Brand column */}
-                    <div>
-                        <Link href={`/c/${company.slug}/home`} className="flex items-center gap-2 text-xl font-extrabold text-white tracking-tight mb-4">
-                            <img src="/logo.webp" alt={`${company.name} Logo`} className="h-9 w-auto brightness-200" />
-                            <span>{company.logoText}</span>
-                        </Link>
-                        <p className="text-sm leading-relaxed mb-4 text-gray-400">
-                            {company.description}
-                        </p>
-                    </div>
-
-                    {/* Quick links column */}
-                    <div>
-                        <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                            Explore
-                        </h4>
-                        <ul className="space-y-3 text-sm">
-                            <li>
-                                <Link href={`/c/${company.slug}/home`} className="hover:text-white transition-colors">Home</Link>
-                            </li>
-                            <li>
-                                <Link href={`/c/${company.slug}/home/sessions`} className="hover:text-white transition-colors">Online Sessions</Link>
-                            </li>
-                            <li>
-                                <Link href={`/c/${company.slug}/home/blogs`} className="hover:text-white transition-colors">Blogs & Insights</Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Clinic links column */}
-                    <div>
-                        <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                            Portal & Tools
-                        </h4>
-                        <ul className="space-y-3 text-sm">
-                            <li>
-                                <Link href={`/${company.slug}/login`} className="hover:text-white transition-colors">Client Sign In</Link>
-                            </li>
-                            <li>
-                                <Link href={`/c/${company.slug}/home/onboarding`} className="hover:text-white transition-colors">Book Appointment</Link>
-                            </li>
-                            <li>
-                                <Link href={getLinkWithCompany("/admin/dashboard")} className="hover:text-white transition-colors">Provider Dashboard</Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Contact column */}
-                    <div>
-                        <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                            Get in Touch
-                        </h4>
-                        <ul className="space-y-3 text-sm">
-                            <li className="flex items-center gap-2">
-                                <Phone className="h-4 w-4 shrink-0 text-brand-primary" />
-                                <span>{company.phone}</span>
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <Mail className="h-4 w-4 shrink-0 text-brand-primary" />
-                                <span>{company.email}</span>
-                            </li>
-                            <li className="flex items-center gap-2 font-normal">
-                                <MapPin className="h-4 w-4 shrink-0 text-brand-primary" />
-                                <span className="leading-relaxed">{company.address}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                {/* Bottom line */}
-                <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
-                    <p>© {new Date().getFullYear()} {company.name}. All rights reserved.</p>
-                    <p className="flex items-center gap-1 mt-4 sm:mt-0">
-                        Made with <Heart className="h-3.5 w-3.5 fill-brand-primary stroke-brand-primary" /> for healthy living.
-                    </p>
-                </div>
+  return (
+    <footer className="bg-[#0F2F2A] text-[#93A5A0] pt-16 pb-12 border-t border-[#1B4D45]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+          {/* Brand & RERA Credentials */}
+          <div className="space-y-4">
+            <Link
+              href={`/c/${companySlug}/home`}
+              className="flex items-center gap-2.5 text-white tracking-tight"
+            >
+              <div className="size-9 rounded-lg bg-[#0F766E] text-white flex items-center justify-center font-bold">
+                <Building2 className="size-5" />
+              </div>
+              <span className="font-extrabold text-xl text-white">{SITE_CONFIG.brandName}</span>
+            </Link>
+            <p className="text-xs leading-relaxed text-[#BAC7C3]">
+              {SITE_CONFIG.tagline}. Dedicated to helping homebuyers find verified premium homes across Pune with complete transparency and 0% buyer brokerage.
+            </p>
+            {/* MahaRERA Badge */}
+            <div className="bg-[#153D37] border border-[#235850] rounded-xl p-3 space-y-1">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-white">
+                <ShieldCheck className="size-4 text-[#2DD4BF]" />
+                <span>MahaRERA Registered</span>
+              </div>
+              <p className="text-[11px] text-[#A2B6B0]">
+                Agent Reg: <strong className="text-white font-mono">{SITE_CONFIG.rera.number}</strong>
+              </p>
+              <a
+                href={SITE_CONFIG.rera.verificationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-[10px] text-[#2DD4BF] hover:underline font-semibold"
+              >
+                <span>Verify on MahaRERA Portal</span>
+                <ExternalLink className="size-2.5" />
+              </a>
             </div>
-        </footer>
-    )
+          </div>
+
+          {/* Prime Pune Areas */}
+          <div>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">
+              Pune Prime Areas
+            </h4>
+            <ul className="space-y-2.5 text-xs">
+              <li>
+                <Link href={`/c/${companySlug}/home#properties`} className="hover:text-white transition-colors">
+                  Baner & Balewadi (₹9,500/sqft avg)
+                </Link>
+              </li>
+              <li>
+                <Link href={`/c/${companySlug}/home#properties`} className="hover:text-white transition-colors">
+                  Wakad & Tathawade (₹7,800/sqft avg)
+                </Link>
+              </li>
+              <li>
+                <Link href={`/c/${companySlug}/home#properties`} className="hover:text-white transition-colors">
+                  Kharadi & Viman Nagar (₹9,200/sqft avg)
+                </Link>
+              </li>
+              <li>
+                <Link href={`/c/${companySlug}/home#properties`} className="hover:text-white transition-colors">
+                  Hinjewadi IT Phase 1-3 (₹6,800/sqft avg)
+                </Link>
+              </li>
+              <li>
+                <Link href={`/c/${companySlug}/home#properties`} className="hover:text-white transition-colors">
+                  Bavdhan & Kothrud (₹8,900/sqft avg)
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">
+              Explore & Resources
+            </h4>
+            <ul className="space-y-2.5 text-xs">
+              <li>
+                <Link href={`/c/${companySlug}/home#properties`} className="hover:text-white transition-colors">
+                  Featured Property Portfolio
+                </Link>
+              </li>
+              <li>
+                <Link href={`/c/${companySlug}/home#how-it-works`} className="hover:text-white transition-colors">
+                  How 0% Brokerage Works
+                </Link>
+              </li>
+              <li>
+                <Link href={`/c/${companySlug}/home#testimonials`} className="hover:text-white transition-colors">
+                  Client Reviews & Stories
+                </Link>
+              </li>
+              <li>
+                <Link href={`/c/${companySlug}/home#faq`} className="hover:text-white transition-colors">
+                  Home Buyer FAQs
+                </Link>
+              </li>
+              <li>
+                <Link href={`/c/${companySlug}/home/blogs`} className="hover:text-white transition-colors">
+                  Pune Real Estate Market Insights
+                </Link>
+              </li>
+              <li>
+                <Link href={`/c/${companySlug}/dashboard`} className="hover:text-white transition-colors flex items-center gap-1">
+                  <span>Agent CRM Portal</span>
+                  <ArrowRight className="size-3" />
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact Details */}
+          <div>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">
+              Pune Advisory Desk
+            </h4>
+            <ul className="space-y-3 text-xs">
+              <li className="flex items-start gap-2.5">
+                <MapPin className="size-4 shrink-0 text-[#2DD4BF] mt-0.5" />
+                <span className="leading-relaxed">
+                  {SITE_CONFIG.officeAddress.line1}, {SITE_CONFIG.officeAddress.line2},{" "}
+                  {SITE_CONFIG.officeAddress.city} - {SITE_CONFIG.officeAddress.pincode}
+                </span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Phone className="size-4 shrink-0 text-[#2DD4BF]" />
+                <a href={`tel:${SITE_CONFIG.primaryPhone}`} className="hover:text-white transition-colors font-medium">
+                  {SITE_CONFIG.primaryPhoneDisplay}
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Mail className="size-4 shrink-0 text-[#2DD4BF]" />
+                <a href={`mailto:${SITE_CONFIG.email}`} className="hover:text-white transition-colors">
+                  {SITE_CONFIG.email}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Disclaimer & Bottom Bar */}
+        <div className="border-t border-[#1B4D45] pt-6 space-y-4">
+          <p className="text-[11px] leading-relaxed text-[#7C938D]">
+            <strong className="text-[#A2B6B0]">Legal Disclaimer:</strong> {SITE_CONFIG.rera.disclaimer} {SITE_CONFIG.brokerageClaim.disclaimer}
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#7C938D]">
+            <span>
+              © {new Date().getFullYear()} {SITE_CONFIG.legalEntityName}. All rights reserved.
+            </span>
+            <div className="flex items-center gap-4 text-[11px]">
+              <Link href={`/c/${companySlug}/home`} className="hover:text-white transition-colors">
+                Privacy Policy
+              </Link>
+              <span>·</span>
+              <Link href={`/c/${companySlug}/home`} className="hover:text-white transition-colors">
+                Terms of Service
+              </Link>
+              <span>·</span>
+              <Link href={`/c/${companySlug}/home`} className="hover:text-white transition-colors">
+                RERA Compliance
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 }
