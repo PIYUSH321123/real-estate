@@ -1,345 +1,400 @@
 "use client"
+
 import * as React from "react"
-import { 
-    Users, 
-    Calendar, 
-    TrendingUp, 
-    Activity, 
-    ArrowUpRight, 
-    Clock, 
-    CheckCircle2, 
-    UserPlus, 
-    TrendingDown, 
-    ClipboardList,
-    Search,
-    Bell,
-    Moon,
-    Sun,
-    ArrowUp,
-    ArrowDown
-} from "lucide-react"
-import { useTheme } from "next-themes"
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { useSidebar } from "@/components/ui/sidebar"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useParams } from "next/navigation"
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+  CalendarCheck,
+  CheckCircle2,
+  Clock,
+  ExternalLink,
+  Flame,
+  Plus,
+  TrendingUp,
+  Users,
+} from "lucide-react"
 
-export default function Page() {
-    const appointments = [
-        {
-            patient: "Alice Johnson",
-            time: "09:30 AM",
-            type: "Knee Rehabilitation",
-            practitioner: "Dr. Anil (Physio)",
-            status: "Confirmed",
-            statusVariant: "success"
-        },
-        {
-            patient: "Bob Smith",
-            time: "11:00 AM",
-            type: "Lower Back Flow",
-            practitioner: "Dr. Ankita (Yoga)",
-            status: "Pending",
-            statusVariant: "warning"
-        },
-        {
-            patient: "Clara Davis",
-            time: "02:30 PM",
-            type: "Post-Op Recovery",
-            practitioner: "Dr. Anil (Physio)",
-            status: "Confirmed",
-            statusVariant: "success"
-        },
-        {
-            patient: "Daniel Wilson",
-            time: "04:00 PM",
-            type: "Spine Alignment",
-            practitioner: "Dr. Ankita (Yoga)",
-            status: "Checked In",
-            statusVariant: "secondary"
-        }
-    ]
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { gharsetuStore } from "@/lib/mock/store"
+import { LeadSource } from "@/types/real-estate"
 
-    const recentLeads = [
-        {
-            name: "Emily Brown",
-            email: "emily@example.com",
-            phone: "+91 98765 00112",
-            source: "Website Form",
-            date: "10 mins ago"
-        },
-        {
-            name: "John Carter",
-            email: "john.c@example.com",
-            phone: "+91 98765 00113",
-            source: "WhatsApp Inquiry",
-            date: "1 hour ago"
-        },
-        {
-            name: "Sophia Martinez",
-            email: "sophia@example.com",
-            phone: "+91 98765 00114",
-            source: "Google Maps",
-            date: "3 hours ago"
-        }
-    ]
+export default function DashboardPage() {
+  const params = useParams()
+  const companySlug = (Array.isArray(params.company) ? params.company[0] : params.company) || "demo"
 
-    const { theme, setTheme } = useTheme()
-    const { open, openMobile, isMobile } = useSidebar()
-    const isCollapsed = isMobile ? !openMobile : !open
-    const [mounted, setMounted] = React.useState(false)
+  const [leads, setLeads] = React.useState(gharsetuStore.leads)
+  const [followUps, setFollowUps] = React.useState(gharsetuStore.followUps)
+  const [dialogOpen, setDialogOpen] = React.useState(false)
 
-    React.useEffect(() => {
-        setMounted(true)
-    }, [])
+  // Form states for new lead
+  const [leadName, setLeadName] = React.useState("")
+  const [leadMobile, setLeadMobile] = React.useState("")
+  const [leadBhk, setLeadBhk] = React.useState("3 BHK")
+  const [leadLocality, setLeadLocality] = React.useState("Baner")
+  const [leadBudget, setLeadBudget] = React.useState("₹1.4 Cr")
+  const [leadSource, setLeadSource] = React.useState<LeadSource>("Facebook Ad")
+  const [leadAgent, setLeadAgent] = React.useState("Sameer Khan")
 
-    return (
-        <div className={`flex-1 space-y-6 p-6 md:p-8 pt-6 ${isCollapsed ? "pl-12 md:pl-14 transition-[padding] duration-200" : "transition-[padding] duration-200"}`}>
-            {/* Page Header */}
-            <div className="flex flex-row items-center justify-between space-y-0 pb-4 border-b border-slate-100 dark:border-slate-800/80">
-                <div className="flex items-center gap-4">
-                    <div>
-                        <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Dashboard</h2>
-                        <p className="text-xs text-slate-400 dark:text-slate-550 mt-0.5">
-                            Overview of your practice's metrics, clients, and upcoming schedule.
-                        </p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-4 shrink-0">
-                    {/* Search Bar */}
-                    <div className="relative w-56 hidden sm:block">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
-                        <input 
-                            type="text" 
-                            placeholder="Search..." 
-                            className="w-full pl-8.5 pr-4 py-1.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/50 dark:border-slate-800 focus:outline-none focus:ring-1 focus:ring-[#f97316]/50 placeholder-slate-400 dark:placeholder-slate-500 transition-all"
-                        />
-                    </div>
-                    {/* Notification Bell */}
-                    <button className="relative h-9 w-9 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center transition-all cursor-pointer">
-                        <Bell className="h-4 w-4" />
-                        <span className="absolute top-2.5 right-2.5 h-1.5 w-1.5 rounded-full bg-[#f97316] border border-white dark:border-slate-900" />
-                    </button>
-                    {/* Theme Toggle (Moon/Sun) */}
-                    <button 
-                        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                        className="h-9 w-9 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center transition-all cursor-pointer"
-                        title="Toggle Theme"
-                    >
-                        {mounted && theme === "dark" ? (
-                            <Sun className="h-4 w-4" />
-                        ) : (
-                            <Moon className="h-4 w-4" />
-                        )}
-                        {!mounted && <div className="h-4 w-4 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse" />}
-                    </button>
-                    {/* Divider */}
-                    <div className="h-5 w-px bg-slate-200 dark:bg-slate-800" />
-                    {/* Profile */}
-                    <div className="flex items-center gap-3">
-                        <div className="text-right hidden md:block">
-                            <p className="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Dr. Sarah</p>
-                            <p className="text-[9px] font-medium text-slate-400 dark:text-slate-500 tracking-wider">Admin</p>
-                        </div>
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#4ade80] to-[#f97316] flex items-center justify-center text-white text-[10px] font-bold shadow-xs">
-                            DS
-                        </div>
-                    </div>
-                </div>
-            </div>
+  const handleAddLead = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!leadName || !leadMobile) return
 
-            {/* KPI Stats Grid */}
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-                {/* Total Patients */}
-                <Card className="shadow-xs border-slate-100/80 dark:border-slate-800/80 rounded-2xl">
-                    <CardContent className="p-6 flex items-center justify-between">
-                        <div className="space-y-1">
-                            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
-                                Total Patients
-                            </span>
-                            <span className="text-3xl font-bold text-slate-900 dark:text-white block">
-                                284
-                            </span>
-                            <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
-                                <span>+12.5%</span>
-                                <ArrowDown className="h-3 w-3" />
-                            </div>
-                        </div>
-                        <div className="h-12 w-12 rounded-2xl bg-red-50/70 dark:bg-red-950/20 flex items-center justify-center text-red-500 shrink-0">
-                            <Users className="h-5 w-5" />
-                        </div>
-                    </CardContent>
-                </Card>
+    gharsetuStore.addLead({
+      name: leadName,
+      mobile: leadMobile,
+      bhk: leadBhk,
+      locality: leadLocality,
+      city: "Pune",
+      budgetDisplay: leadBudget,
+      source: leadSource,
+      assignedAgent: leadAgent,
+      status: "New",
+      tags: ["Walk-in / Direct", `${leadLocality} preference`],
+    })
 
-                {/* Today's Sessions */}
-                <Card className="shadow-xs border-slate-100/80 dark:border-slate-800/80 rounded-2xl">
-                    <CardContent className="p-6 flex items-center justify-between">
-                        <div className="space-y-1">
-                            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
-                                Today's Sessions
-                            </span>
-                            <span className="text-3xl font-bold text-slate-900 dark:text-white block">
-                                48
-                            </span>
-                            <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
-                                <span>+5.2%</span>
-                                <ArrowDown className="h-3 w-3" />
-                            </div>
-                        </div>
-                        <div className="h-12 w-12 rounded-2xl bg-red-50/70 dark:bg-red-950/20 flex items-center justify-center text-red-500 shrink-0">
-                            <Calendar className="h-5 w-5" />
-                        </div>
-                    </CardContent>
-                </Card>
+    setLeads([...gharsetuStore.leads])
+    setLeadName("")
+    setLeadMobile("")
+    setDialogOpen(false)
+  }
 
-                {/* Lead Conversion */}
-                <Card className="shadow-xs border-slate-100/80 dark:border-slate-800/80 rounded-2xl">
-                    <CardContent className="p-6 flex items-center justify-between">
-                        <div className="space-y-1">
-                            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
-                                Lead Conversion
-                            </span>
-                            <span className="text-3xl font-bold text-slate-900 dark:text-white block">
-                                18.4%
-                            </span>
-                            <div className="flex items-center gap-1 text-rose-600 dark:text-rose-400 text-xs font-semibold">
-                                <span>-1.8%</span>
-                                <ArrowUp className="h-3 w-3" />
-                            </div>
-                        </div>
-                        <div className="h-12 w-12 rounded-2xl bg-red-50/70 dark:bg-red-950/20 flex items-center justify-center text-red-500 shrink-0">
-                            <Activity className="h-5 w-5" />
-                        </div>
-                    </CardContent>
-                </Card>
+  // Weekly lead bars (Mon - Sun)
+  const weeklyData = [
+    { day: "Mon", count: 4, height: 40 },
+    { day: "Tue", count: 6, height: 64 },
+    { day: "Wed", count: 5, height: 52 },
+    { day: "Thu", count: 9, height: 90 },
+    { day: "Fri", count: 7, height: 70 },
+    { day: "Sat", count: 11, height: 110 },
+    { day: "Sun", count: 8, height: 84 },
+  ]
 
-                {/* Active Recovery */}
-                <Card className="shadow-xs border-slate-100/80 dark:border-slate-800/80 rounded-2xl">
-                    <CardContent className="p-6 flex items-center justify-between">
-                        <div className="space-y-1">
-                            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
-                                Active Recovery
-                            </span>
-                            <span className="text-3xl font-bold text-slate-900 dark:text-white block">
-                                94 Plans
-                            </span>
-                            <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
-                                <span>+6.3%</span>
-                                <ArrowDown className="h-3 w-3" />
-                            </div>
-                        </div>
-                        <div className="h-12 w-12 rounded-2xl bg-red-50/70 dark:bg-red-950/20 flex items-center justify-center text-red-500 shrink-0">
-                            <ClipboardList className="h-5 w-5" />
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* Bottom Grid: Appointments & Leads */}
-            <div className="grid gap-6 grid-cols-1 lg:grid-cols-12">
-                {/* Left Side: Appointments Table */}
-                <Card className="lg:col-span-8 shadow-xs border-slate-100/80 dark:border-slate-800/80 rounded-2xl flex flex-col justify-between">
-                    <div>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                            <div className="space-y-1">
-                                <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Upcoming Sessions</CardTitle>
-                                <CardDescription className="text-xs text-slate-400 dark:text-slate-500">Today's scheduled appointments</CardDescription>
-                            </div>
-                            <button className="text-xs font-semibold px-4 py-1.5 rounded-full border border-orange-250 dark:border-orange-500/30 text-[#f97316] hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-all cursor-pointer">
-                                View Calendar
-                            </button>
-                        </CardHeader>
-                        <CardContent className="p-0">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow className="border-slate-100 dark:border-slate-805">
-                                        <TableHead className="pl-6 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Patient</TableHead>
-                                        <TableHead className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Time</TableHead>
-                                        <TableHead className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Service Type</TableHead>
-                                        <TableHead className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Therapist</TableHead>
-                                        <TableHead className="pr-6 text-right text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Status</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {appointments.map((a, idx) => (
-                                        <TableRow key={idx} className="border-slate-100 dark:border-slate-800/60 hover:bg-slate-50/30 dark:hover:bg-slate-900/10">
-                                            <TableCell className="pl-6 font-semibold text-slate-950 dark:text-white text-sm py-4">{a.patient}</TableCell>
-                                            <TableCell className="text-slate-400 dark:text-slate-550 text-xs font-medium py-4">{a.time}</TableCell>
-                                            <TableCell className="text-slate-500 dark:text-slate-350 text-xs font-medium py-4">{a.type}</TableCell>
-                                            <TableCell className="text-slate-400 dark:text-slate-550 text-xs font-medium py-4">{a.practitioner}</TableCell>
-                                            <TableCell className="pr-6 text-right py-4">
-                                                <span 
-                                                    className={`text-[10px] font-bold px-3 py-1 rounded-full ${
-                                                        a.statusVariant === "success" 
-                                                            ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400"
-                                                            : a.statusVariant === "warning"
-                                                            ? "bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400"
-                                                            : "bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400"
-                                                    }`}
-                                                >
-                                                    {a.status}
-                                                </span>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </CardContent>
-                    </div>
-                </Card>
-
-                {/* Right Side: Recent Leads Feed */}
-                <Card className="lg:col-span-4 shadow-xs border-slate-100/80 dark:border-slate-800/80 rounded-2xl flex flex-col justify-between">
-                    <div>
-                        <CardHeader className="pb-4">
-                            <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Recent Inquiries</CardTitle>
-                            <CardDescription className="text-xs text-slate-400 dark:text-slate-550">New leads to follow up</CardDescription>
-                        </CardHeader>
-                        <CardContent className="divide-y divide-slate-100 dark:divide-slate-800/60 p-0">
-                            {recentLeads.map((lead, idx) => (
-                                <div key={idx} className="flex items-start gap-4 px-6 py-4">
-                                    <div className={`h-9 w-9 rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0 ${
-                                        idx === 0 ? "bg-blue-500" : idx === 1 ? "bg-purple-500" : "bg-pink-500"
-                                    }`}>
-                                        {lead.name.split(" ").map(n => n[0]).join("")}
-                                    </div>
-                                    <div className="space-y-1.5 flex-1 min-w-0">
-                                        <div className="flex items-start justify-between gap-2">
-                                            <p className="text-sm font-bold text-slate-955 dark:text-white truncate leading-none">
-                                                {lead.name}
-                                            </p>
-                                            <span className="text-[9px] text-slate-400 dark:text-slate-500 whitespace-nowrap">{lead.date}</span>
-                                        </div>
-                                        <p className="text-xs text-slate-400 dark:text-slate-550 truncate leading-none">
-                                            {lead.email}
-                                        </p>
-                                        <div className="flex items-center justify-between pt-1">
-                                            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">{lead.phone}</span>
-                                            <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 border border-slate-100 dark:border-slate-800">
-                                                {lead.source}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </CardContent>
-                    </div>
-                    <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-800/60 flex justify-center">
-                        <a href="#" className="text-xs font-bold text-emerald-600 hover:text-emerald-700 hover:underline flex items-center gap-1 transition-all">
-                            View All Inquiries →
-                        </a>
-                    </div>
-                </Card>
-            </div>
+  return (
+    <div className="flex-1 p-6 md:p-8 bg-[#F6F7F5] min-h-screen text-[#14211C] flex flex-col gap-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[#14211C]">
+            Dashboard
+          </h1>
+          <p className="text-sm text-[#5B6B65] mt-0.5">
+            Welcome back, Sameer. Here is your agency pipeline overview for today.
+          </p>
         </div>
-    )
+
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="bg-[#0F766E] hover:bg-[#0d655e] text-white font-semibold rounded-lg px-4 py-2 flex items-center gap-2 shadow-sm cursor-pointer">
+              <Plus className="size-4" />
+              <span>Add lead</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[480px]">
+            <form onSubmit={handleAddLead}>
+              <DialogHeader>
+                <DialogTitle className="text-lg font-bold text-[#14211C]">
+                  Add New Real Estate Lead
+                </DialogTitle>
+                <DialogDescription>
+                  Enter client details and property requirements to automatically route to an agent.
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="name">Client Full Name</Label>
+                  <Input
+                    id="name"
+                    value={leadName}
+                    onChange={(e) => setLeadName(e.target.value)}
+                    placeholder="e.g. Rahul Sharma"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="grid gap-2">
+                    <Label htmlFor="mobile">Mobile Number</Label>
+                    <Input
+                      id="mobile"
+                      value={leadMobile}
+                      onChange={(e) => setLeadMobile(e.target.value)}
+                      placeholder="+91 98..."
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="bhk">Configuration</Label>
+                    <Select value={leadBhk} onValueChange={setLeadBhk}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="BHK" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1 BHK">1 BHK</SelectItem>
+                        <SelectItem value="2 BHK">2 BHK</SelectItem>
+                        <SelectItem value="3 BHK">3 BHK</SelectItem>
+                        <SelectItem value="4 BHK Villa">4 BHK Villa</SelectItem>
+                        <SelectItem value="Plot">Residential Plot</SelectItem>
+                        <SelectItem value="Commercial">Commercial Shop</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="grid gap-2">
+                    <Label htmlFor="locality">Preferred Locality</Label>
+                    <Input
+                      id="locality"
+                      value={leadLocality}
+                      onChange={(e) => setLeadLocality(e.target.value)}
+                      placeholder="e.g. Baner, Wakad"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="budget">Budget Target</Label>
+                    <Input
+                      id="budget"
+                      value={leadBudget}
+                      onChange={(e) => setLeadBudget(e.target.value)}
+                      placeholder="e.g. ₹1.2 Cr"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="grid gap-2">
+                    <Label htmlFor="source">Lead Source</Label>
+                    <Select value={leadSource} onValueChange={(val) => setLeadSource(val as LeadSource)}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Facebook Ad">Facebook Ad</SelectItem>
+                        <SelectItem value="99acres">99acres</SelectItem>
+                        <SelectItem value="MagicBricks">MagicBricks</SelectItem>
+                        <SelectItem value="WhatsApp">WhatsApp</SelectItem>
+                        <SelectItem value="Website">Website Form</SelectItem>
+                        <SelectItem value="Walk-in">Walk-in</SelectItem>
+                        <SelectItem value="Referral">Referral</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="agent">Assign Agent</Label>
+                    <Select value={leadAgent} onValueChange={setLeadAgent}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Sameer Khan">Sameer Khan</SelectItem>
+                        <SelectItem value="Anita Rao">Anita Rao</SelectItem>
+                        <SelectItem value="Pooja Iyer">Pooja Iyer</SelectItem>
+                        <SelectItem value="Rohit Jain">Rohit Jain</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+
+              <DialogFooter>
+                <Button type="submit" className="bg-[#0F766E] hover:bg-[#0d655e] text-white">
+                  Save Lead
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      {/* 4 Core KPIs - Matching Mockup Screen 01 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* KPI 1 */}
+        <Card className="p-4 bg-white border border-[#E3E7E4] rounded-xl shadow-xs flex flex-col justify-between">
+          <div className="text-xs font-medium text-[#5B6B65]">New leads today</div>
+          <div className="text-3xl font-extrabold text-[#14211C] my-1">24</div>
+          <div>
+            <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-[#E3F2EF] text-[#0B4F49]">
+              +6 vs yesterday
+            </span>
+          </div>
+        </Card>
+
+        {/* KPI 2 */}
+        <Card className="p-4 bg-white border border-[#E3E7E4] rounded-xl shadow-xs flex flex-col justify-between">
+          <div className="text-xs font-medium text-[#5B6B65]">Site visits this week</div>
+          <div className="text-3xl font-extrabold text-[#14211C] my-1">11</div>
+          <div>
+            <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-[#E3F2EF] text-[#0B4F49]">
+              4 today
+            </span>
+          </div>
+        </Card>
+
+        {/* KPI 3 */}
+        <Card className="p-4 bg-white border border-[#E3E7E4] rounded-xl shadow-xs flex flex-col justify-between">
+          <div className="text-xs font-medium text-[#5B6B65]">Follow-ups due</div>
+          <div className="text-3xl font-extrabold text-[#14211C] my-1">18</div>
+          <div>
+            <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-[#FBE0DC] text-[#8F2A1D]">
+              7 overdue
+            </span>
+          </div>
+        </Card>
+
+        {/* KPI 4 */}
+        <Card className="p-4 bg-white border border-[#E3E7E4] rounded-xl shadow-xs flex flex-col justify-between">
+          <div className="text-xs font-medium text-[#5B6B65]">Pipeline value</div>
+          <div className="text-3xl font-extrabold text-[#14211C] my-1">₹ 14.2 Cr</div>
+          <div>
+            <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-[#FDEBD0] text-[#8A4B00]">
+              9 in negotiation
+            </span>
+          </div>
+        </Card>
+      </div>
+
+      {/* Main Row: Leads this week + Today's follow-ups */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Weekly Leads Bar Chart Card */}
+        <Card className="p-5 bg-white border border-[#E3E7E4] rounded-xl shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="font-semibold text-base text-[#14211C]">Leads this week</h3>
+              <span className="text-xs font-semibold text-[#0F766E] bg-[#E3F2EF] px-2 py-0.5 rounded-md">
+                50 Total Leads
+              </span>
+            </div>
+
+            {/* Custom Bar Visualization matching Mockup exactly */}
+            <div className="flex items-end justify-between gap-3 h-[140px] pt-4 pb-2 px-2 border-b border-[#EEF1EF]">
+              {weeklyData.map((item) => (
+                <div key={item.day} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                  <span className="text-[10px] text-[#5B6B65] font-medium">{item.count}</span>
+                  <div
+                    className="w-full bg-[#0F766E] rounded-t-sm transition-all duration-300 hover:bg-[#115e59]"
+                    style={{ height: `${item.height}px` }}
+                  />
+                  <span className="text-xs text-[#5B6B65] font-medium">{item.day}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="text-xs text-[#5B6B65] mt-4 pt-1">
+            Mon–Sun · Source mix:{" "}
+            <span className="font-semibold text-[#14211C]">Ads 42%</span> ·{" "}
+            <span className="font-semibold text-[#14211C]">Portals 31%</span> ·{" "}
+            <span className="font-semibold text-[#14211C]">WhatsApp 18%</span> ·{" "}
+            <span className="font-semibold text-[#14211C]">Walk-in 9%</span>
+          </div>
+        </Card>
+
+        {/* Today's Follow-ups Table Card */}
+        <Card className="p-5 bg-white border border-[#E3E7E4] rounded-xl shadow-xs">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="font-semibold text-base text-[#14211C]">Today&apos;s follow-ups</h3>
+            <a
+              href={`/c/${companySlug}/dashboard/follow-ups`}
+              className="text-xs font-semibold text-[#0F766E] hover:underline flex items-center gap-1"
+            >
+              View all ({followUps.length})
+              <ExternalLink className="size-3" />
+            </a>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-[#EEF1EF] text-[#5B6B65]">
+                  <th className="py-2.5 px-2 font-semibold">Lead</th>
+                  <th className="py-2.5 px-2 font-semibold">Task</th>
+                  <th className="py-2.5 px-2 font-semibold text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#EEF1EF]">
+                {followUps.slice(0, 4).map((f) => (
+                  <tr key={f.id} className="hover:bg-[#F9FAF9] transition-colors">
+                    <td className="py-3 px-2 font-semibold text-[#14211C]">
+                      <a
+                        href={`/c/${companySlug}/dashboard/leads/${f.leadId}`}
+                        className="hover:text-[#0F766E] underline-offset-2 hover:underline"
+                      >
+                        {f.leadName}
+                      </a>
+                    </td>
+                    <td className="py-3 px-2 text-[#5B6B65]">{f.task}</td>
+                    <td className="py-3 px-2 text-right">
+                      {f.status === "Overdue" ? (
+                        <span className="inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#FBE0DC] text-[#8F2A1D]">
+                          Overdue {f.overdueDays ? `${f.overdueDays}d` : ""}
+                        </span>
+                      ) : (
+                        <span className="inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#FDEBD0] text-[#8A4B00]">
+                          {f.dueTime || "Today"}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      </div>
+
+      {/* Quick Action Shortcuts row */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <a
+          href={`/c/${companySlug}/dashboard/leads`}
+          className="p-3 bg-white border border-[#E3E7E4] rounded-lg hover:border-[#0F766E] transition-colors flex items-center justify-between text-xs font-semibold text-[#14211C]"
+        >
+          <span>Leads Kanban Board</span>
+          <span className="bg-[#E3F2EF] text-[#0B4F49] px-2 py-0.5 rounded text-[11px]">8 New</span>
+        </a>
+        <a
+          href={`/c/${companySlug}/dashboard/properties`}
+          className="p-3 bg-white border border-[#E3E7E4] rounded-lg hover:border-[#0F766E] transition-colors flex items-center justify-between text-xs font-semibold text-[#14211C]"
+        >
+          <span>Property Catalog</span>
+          <span className="bg-[#E3F2EF] text-[#0B4F49] px-2 py-0.5 rounded text-[11px]">6 Units</span>
+        </a>
+        <a
+          href={`/c/${companySlug}/dashboard/smart-matches`}
+          className="p-3 bg-white border border-[#E3E7E4] rounded-lg hover:border-[#0F766E] transition-colors flex items-center justify-between text-xs font-semibold text-[#14211C]"
+        >
+          <span className="flex items-center gap-1.5">
+            <Flame className="size-3.5 text-[#F59E0B]" />
+            Smart Matches
+          </span>
+          <span className="bg-[#FDEBD0] text-[#8A4B00] px-2 py-0.5 rounded text-[11px]">7 Matches</span>
+        </a>
+        <a
+          href={`/c/${companySlug}/dashboard/site-visits`}
+          className="p-3 bg-white border border-[#E3E7E4] rounded-lg hover:border-[#0F766E] transition-colors flex items-center justify-between text-xs font-semibold text-[#14211C]"
+        >
+          <span>Site Visits Planner</span>
+          <span className="bg-[#E3F2EF] text-[#0B4F49] px-2 py-0.5 rounded text-[11px]">3 Scheduled</span>
+        </a>
+      </div>
+    </div>
+  )
 }

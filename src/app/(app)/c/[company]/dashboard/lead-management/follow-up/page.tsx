@@ -1,8 +1,5 @@
-import * as React from "react"
-import FollowUpWorkspace from "./follow-up-workspace"
+import FollowUpsPage from "../../follow-ups/page"
 
-export default async function FollowUpPage({ params }: { params: Promise<{ company: string }> }) {
-    await params
-
-    return <FollowUpWorkspace />
+export default function LegacyFollowUpPage() {
+  return <FollowUpsPage />
 }
