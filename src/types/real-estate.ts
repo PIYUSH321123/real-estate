@@ -75,6 +75,8 @@ export interface Property {
   description?: string;
   builder?: string;
   possessionDate?: string;
+  reraNumber?: string;
+  amenities?: string[];
 }
 
 export type SiteVisitStatus = "Confirmed" | "Awaiting reply" | "Completed" | "Cancelled" | "Rescheduled";

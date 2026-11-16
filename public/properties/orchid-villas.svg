@@ -1,0 +1,23 @@
+<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="villa" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFBEB"/>
+      <stop offset="100%" stop-color="#FEF3C7"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="520" fill="url(#bg)"/>
+  <!-- Luxury Gated Villa Architecture -->
+  <polygon points="400,100 160,220 640,220" fill="#92400E"/>
+  <rect x="200" y="220" width="400" height="260" rx="8" fill="url(#villa)"/>
+  <!-- Grand Glass Doors & Pergola -->
+  <rect x="330" y="320" width="140" height="160" rx="4" fill="#0284C7" opacity="0.7"/>
+  <rect x="230" y="250" width="90" height="80" rx="4" fill="#0284C7" opacity="0.6"/>
+  <rect x="480" y="250" width="90" height="80" rx="4" fill="#0284C7" opacity="0.6"/>
+  <!-- Private Pool -->
+  <rect x="100" y="440" width="600" height="80" fill="#38BDF8" opacity="0.85"/>
+  <text x="400" y="495" font-family="system-ui, sans-serif" font-size="22" font-weight="bold" fill="#0F172A" text-anchor="middle">Orchid Luxury Villas · Kharadi</text>
+</svg>

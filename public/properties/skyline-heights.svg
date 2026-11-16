@@ -1,0 +1,28 @@
+<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F2F2A"/>
+      <stop offset="100%" stop-color="#1E4D44"/>
+    </linearGradient>
+    <linearGradient id="facade" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E2E8F0"/>
+      <stop offset="100%" stop-color="#94A3B8"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="520" fill="url(#bg)"/>
+  <rect x="220" y="80" width="360" height="440" rx="12" fill="url(#facade)" opacity="0.95"/>
+  <!-- Balconies -->
+  <g fill="#0F766E">
+    <rect x="250" y="120" width="140" height="40" rx="4"/>
+    <rect x="410" y="120" width="140" height="40" rx="4"/>
+    <rect x="250" y="180" width="140" height="40" rx="4"/>
+    <rect x="410" y="180" width="140" height="40" rx="4"/>
+    <rect x="250" y="240" width="140" height="40" rx="4"/>
+    <rect x="410" y="240" width="140" height="40" rx="4"/>
+    <rect x="250" y="300" width="140" height="40" rx="4"/>
+    <rect x="410" y="300" width="140" height="40" rx="4"/>
+    <rect x="250" y="360" width="140" height="40" rx="4"/>
+    <rect x="410" y="360" width="140" height="40" rx="4"/>
+  </g>
+  <text x="400" y="470" font-family="system-ui, sans-serif" font-size="22" font-weight="bold" fill="#0F2F2A" text-anchor="middle">Skyline Heights · Baner</text>
+</svg>

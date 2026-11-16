@@ -1,0 +1,62 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0B1E1B"/>
+      <stop offset="60%" stop-color="#0F2F2A"/>
+      <stop offset="100%" stop-color="#143D36"/>
+    </linearGradient>
+    <linearGradient id="bldgGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#194D44" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#0B1E1B"/>
+    </linearGradient>
+    <linearGradient id="bldgGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#24685D" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#0F2F2A"/>
+    </linearGradient>
+    <linearGradient id="accentGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F766E" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#EA580C" stop-opacity="0.15"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky Background -->
+  <rect width="1920" height="1080" fill="url(#skyGrad)"/>
+
+  <!-- Ambient Glow -->
+  <circle cx="960" cy="380" r="500" fill="url(#accentGlow)" filter="blur(60px)"/>
+
+  <!-- Back Layer Skyline -->
+  <rect x="120" y="420" width="140" height="660" fill="url(#bldgGrad1)" opacity="0.6"/>
+  <rect x="290" y="360" width="110" height="720" fill="url(#bldgGrad1)" opacity="0.6"/>
+  <rect x="430" y="460" width="170" height="620" fill="url(#bldgGrad1)" opacity="0.5"/>
+  <rect x="640" y="320" width="130" height="760" fill="url(#bldgGrad1)" opacity="0.7"/>
+  <rect x="800" y="400" width="220" height="680" fill="url(#bldgGrad1)" opacity="0.5"/>
+  <rect x="1050" y="290" width="160" height="790" fill="url(#bldgGrad1)" opacity="0.8"/>
+  <rect x="1240" y="430" width="140" height="650" fill="url(#bldgGrad1)" opacity="0.6"/>
+  <rect x="1410" y="350" width="180" height="730" fill="url(#bldgGrad1)" opacity="0.7"/>
+  <rect x="1620" y="470" width="150" height="610" fill="url(#bldgGrad1)" opacity="0.5"/>
+
+  <!-- Mid Layer Architecture Towers -->
+  <rect x="200" y="520" width="160" height="560" fill="url(#bldgGrad2)"/>
+  <rect x="520" y="440" width="190" height="640" fill="url(#bldgGrad2)"/>
+  <rect x="880" y="480" width="240" height="600" fill="url(#bldgGrad2)"/>
+  <rect x="1320" y="460" width="200" height="620" fill="url(#bldgGrad2)"/>
+  <rect x="1560" y="540" width="180" height="540" fill="url(#bldgGrad2)"/>
+
+  <!-- Geometric Architectural Window Grids -->
+  <g fill="#2DD4BF" opacity="0.25">
+    <circle cx="240" cy="560" r="3"/><circle cx="280" cy="560" r="3"/><circle cx="320" cy="560" r="3"/>
+    <circle cx="240" cy="600" r="3"/><circle cx="280" cy="600" r="3"/><circle cx="320" cy="600" r="3"/>
+    <circle cx="240" cy="640" r="3"/><circle cx="280" cy="640" r="3"/><circle cx="320" cy="640" r="3"/>
+    <circle cx="560" cy="500" r="3"/><circle cx="610" cy="500" r="3"/><circle cx="660" cy="500" r="3"/>
+    <circle cx="560" cy="550" r="3"/><circle cx="610" cy="550" r="3"/><circle cx="660" cy="550" r="3"/>
+    <circle cx="560" cy="600" r="3"/><circle cx="610" cy="600" r="3"/><circle cx="660" cy="600" r="3"/>
+    <circle cx="940" cy="540" r="3"/><circle cx="1000" cy="540" r="3"/><circle cx="1060" cy="540" r="3"/>
+    <circle cx="940" cy="590" r="3"/><circle cx="1000" cy="590" r="3"/><circle cx="1060" cy="590" r="3"/>
+    <circle cx="1380" cy="520" r="3"/><circle cx="1440" cy="520" r="3"/>
+    <circle cx="1380" cy="570" r="3"/><circle cx="1440" cy="570" r="3"/>
+  </g>
+
+  <!-- Ground Dark Vignette -->
+  <rect y="840" width="1920" height="240" fill="#071412" opacity="0.9"/>
+</svg>

@@ -22,10 +22,10 @@ export default function SalesGuruPortal() {
     try {
       const exists = await checkCompanyExistsAction(slug.trim());
       if (exists) {
-        toast.success(`Redirecting to ${slug} clinic portal...`);
+        toast.success(`Redirecting to ${slug} real estate portal...`);
         router.push(`/c/${slug.toLowerCase().trim()}/home`);
       } else {
-        toast.error("Company slug not found. Try 'yogaplus', 'stark', 'wayne', or 'hooli'!");
+        toast.error("Company slug not found. Try 'gharsetu'!");
       }
     } catch (err) {
       console.error(err);
