@@ -1,9 +1,5 @@
-import * as React from "react"
-import LeadListComponent from "./leads"
+import LeadsPipelinePage from "../../leads/page"
 
-export default async function LeadsPage({ params }: { params: Promise<{ company: string }> }) {
-    // Await params as required by Next.js 15/16 page props signature
-    await params
-
-    return <LeadListComponent />
+export default function LegacyLeadsPage() {
+  return <LeadsPipelinePage />
 }
