@@ -244,11 +244,54 @@ class GharsetuStore {
   }
 }
 
+const STORE_VERSION = 2;
+
 declare const globalThis: {
-  gharsetuStore?: GharsetuStore;
+  gharsetuStore?: GharsetuStore & { __version?: number };
 } & typeof global;
 
-export const gharsetuStore = globalThis.gharsetuStore ?? new GharsetuStore();
-if (process.env.NODE_ENV !== "production") {
-  globalThis.gharsetuStore = gharsetuStore;
+function initStore(): GharsetuStore {
+  const existing = globalThis.gharsetuStore;
+  const isCurrent =
+    existing &&
+    existing.__version === STORE_VERSION &&
+    typeof existing.addFollowUp === "function" &&
+    typeof existing.hydrateFromStorage === "function" &&
+    typeof existing.subscribe === "function" &&
+    typeof existing.syncFromServer === "function" &&
+    typeof existing.updateSiteVisit === "function" &&
+    typeof existing.updateFollowUps === "function";
+
+  if (isCurrent) {
+    return existing;
+  }
+
+  const fresh = new GharsetuStore() as GharsetuStore & { __version?: number };
+  fresh.__version = STORE_VERSION;
+
+  // Migrate any in-memory data from a pre-HMR store instance
+  if (existing) {
+    if (Array.isArray(existing.leads)) {
+      fresh.leads = mergeUniqueById(existing.leads, fresh.leads);
+    }
+    if (Array.isArray(existing.siteVisits)) {
+      fresh.siteVisits = mergeUniqueById(existing.siteVisits, fresh.siteVisits);
+    }
+    if (Array.isArray(existing.followUps)) {
+      fresh.followUps = mergeUniqueById(existing.followUps, fresh.followUps);
+    }
+    if (Array.isArray(existing.properties)) {
+      fresh.properties = mergeUniqueById(existing.properties, fresh.properties);
+    }
+    if (Array.isArray(existing.deals)) {
+      fresh.deals = mergeUniqueById(existing.deals, fresh.deals);
+    }
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    globalThis.gharsetuStore = fresh;
+  }
+  return fresh;
 }
+
+export const gharsetuStore = initStore();

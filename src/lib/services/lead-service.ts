@@ -236,10 +236,15 @@ export async function submitWebsiteLead(
 
     const json = await res.json();
     if (!res.ok) {
-      return {
-        success: false,
-        message: json.error || "Please check your details and try again.",
-      };
+      // Only treat 4xx as user validation errors; fall back locally on 5xx server glitches
+      if (res.status >= 400 && res.status < 500) {
+        return {
+          success: false,
+          message: json.error || "Please check your details and try again.",
+        };
+      }
+      console.warn("Server returned 5xx on /api/leads, registering locally:", json);
+      return processWebsiteLead(data);
     }
 
     // Mirror exact server-created records into browser store + localStorage
