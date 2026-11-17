@@ -1,22 +1,38 @@
 import React from "react";
-import Navbar from "@/components/marketing/Navbar";
-import Footer from "@/components/marketing/Footer";
+import { Bricolage_Grotesque, Figtree } from "next/font/google";
 import { SITE_CONFIG } from "@/config/site-config";
+import "@/components/landing/landing.css";
 import type { Metadata } from "next";
 
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-bricolage",
+  display: "swap",
+});
+
+const figtree = Figtree({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-figtree",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Gharsetu Realty | MahaRERA Verified Homes in Pune | 0% Brokerage",
+  title: "Gharsetu Realty | Pune Homes You Can Walk Through This Weekend",
   description:
-    "Explore MahaRERA verified 2, 3 & 4 BHK apartments, luxury penthouses, and villas in Baner, Wakad, Kharadi, and Hinjewadi with Gharsetu Realty. Free private site visits and zero buyer brokerage.",
+    "Handpicked 2, 3 and 4 BHK homes in Baner, Wakad, Kharadi and Hinjewadi. Developer pricing, MahaRERA registered projects, 0% buyer brokerage and a free cab to every site visit.",
   openGraph: {
-    title: "Gharsetu Realty - Pune's Most Trusted Real Estate Advisory",
+    title: "Gharsetu Realty — MahaRERA Verified Pune Homes (0% Brokerage)",
     description:
-      "Direct developer pricing, 100% MahaRERA verified properties, and door-to-door escorted site visits in Pune.",
+      "Direct developer pricing, registered MahaRERA projects, and complimentary doorstep AC cab site visits across Pune.",
     type: "website",
+    locale: "en_IN",
+    siteName: "Gharsetu Realty",
   },
 };
 
-export default function MarketingLayout({ children }: { children: React.ReactNode }) {
+export default function PublicLandingLayout({ children }: { children: React.ReactNode }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
@@ -32,19 +48,17 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       postalCode: SITE_CONFIG.officeAddress.pincode,
       addressCountry: "IN",
     },
-    areaServed: ["Baner", "Wakad", "Kharadi", "Hinjewadi", "Bavdhan", "Balewadi", "Pune"],
-    priceRange: "₹65 Lakhs - ₹5 Crores",
+    areaServed: ["Baner", "Wakad", "Kharadi", "Hinjewadi", "Hadapsar", "Lonavala", "Pune"],
+    priceRange: "₹48 Lakhs - ₹3.2 Crores",
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F6F7F5] selection:bg-[#0F766E] selection:text-white">
+    <div className={`${bricolage.variable} ${figtree.variable} gh-landing`}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Navbar />
-      <main className="flex-1">{children}</main>
-      <Footer />
+      {children}
     </div>
   );
 }
