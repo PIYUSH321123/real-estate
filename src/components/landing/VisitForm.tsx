@@ -149,7 +149,7 @@ export function VisitForm({
     <section className="gh-band" id="visit" aria-label="Book a free site visit">
       <div className="gh-wrap gh-band-grid">
         <div>
-          <span className="gh-eyebrow" style={{ color: "#5EE0B8" }}>
+          <span className="gh-eyebrow" style={{ color: "#E5D4B7" }}>
             Free site visit
           </span>
           <h2 style={{ marginTop: "8px" }}>See it in person before you decide.</h2>
@@ -168,7 +168,7 @@ export function VisitForm({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="size-5 shrink-0"
-                style={{ color: "#5EE0B8" }}
+                style={{ color: "#E5D4B7" }}
                 aria-hidden="true"
               >
                 <path d="m5 12 5 5 9-10" />
@@ -184,7 +184,7 @@ export function VisitForm({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="size-5 shrink-0"
-                style={{ color: "#5EE0B8" }}
+                style={{ color: "#E5D4B7" }}
                 aria-hidden="true"
               >
                 <path d="m5 12 5 5 9-10" />
@@ -200,7 +200,7 @@ export function VisitForm({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="size-5 shrink-0"
-                style={{ color: "#5EE0B8" }}
+                style={{ color: "#E5D4B7" }}
                 aria-hidden="true"
               >
                 <path d="m5 12 5 5 9-10" />

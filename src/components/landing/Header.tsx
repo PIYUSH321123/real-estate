@@ -9,30 +9,39 @@ interface HeaderProps {
 }
 
 export function Header({ companySlug = "gharsetu" }: HeaderProps) {
+  const [scrolled, setScrolled] = React.useState(false);
   const crmUrl = `/c/${companySlug}/dashboard`;
 
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 18);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="gh-top" role="banner">
+    <header className={`gh-top ${scrolled ? "scrolled" : ""}`} role="banner">
       <div className="gh-wrap">
         <Link className="gh-logo" href="#top" aria-label="Gharsetu Realty Home">
           <span className="gh-logo-mark" aria-hidden="true">
             <svg
-              viewBox="0 0 24 24"
+              viewBox="0 0 36 36"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="1.35"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="size-5"
+              className="size-8"
             >
-              <path d="M4 21V8l8-5 8 5v13" />
-              <path d="M9 21v-6h6v6" />
-              <path d="M9 11h.01M15 11h.01" />
+              <path d="M18 4L25 8.5V31H11V8.5L18 4Z" />
+              <path d="M11 13L5 16.5V31H11" />
+              <path d="M25 13L31 16.5V31H25" />
+              <path d="M18 4V31" />
             </svg>
           </span>
           <span>
-            <b>{SITE_CONFIG.brandName}</b>
-            <small>Pune real estate advisory</small>
+            <b>GHARSETU</b>
+            <small>REALTY · PUNE</small>
           </span>
         </Link>
 
@@ -46,33 +55,25 @@ export function Header({ companySlug = "gharsetu" }: HeaderProps) {
 
         <div className="gh-top-actions">
           <a
-            className="gh-phone"
+            className="gh-phone-pill"
             href={`tel:${SITE_CONFIG.primaryPhone}`}
             aria-label={`Call us at ${SITE_CONFIG.primaryPhoneDisplay}`}
-          >
-            {SITE_CONFIG.primaryPhoneDisplay}
-          </a>
-          <a
-            className="gh-btn gh-btn-wa"
-            href={`https://wa.me/${SITE_CONFIG.whatsappPhone}?text=Hi%20Gharsetu%20Realty!%20I%20am%20looking%20for%20a%20property%20in%20Pune.`}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Chat with Gharsetu Realty on WhatsApp"
           >
             <svg
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="1.8"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="size-4.5"
+              className="size-4"
               aria-hidden="true"
             >
-              <path d="M21 12a9 9 0 0 1-13.4 7.8L3 21l1.3-4.4A9 9 0 1 1 21 12Z" />
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
             </svg>
-            <span>WhatsApp</span>
+            <span>{SITE_CONFIG.primaryPhoneDisplay}</span>
           </a>
+
           <Link
             className="gh-crm-link"
             href={crmUrl}

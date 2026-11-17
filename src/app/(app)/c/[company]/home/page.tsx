@@ -145,21 +145,28 @@ export default function GharsetuPublicLandingPage() {
           onOpenVisitModal={() => setVisitModalOpen(true)}
         />
 
-        <div className="gh-wrap">
-          {/* 3. SearchCard (Overlapping Hero by -72px) */}
-          <SearchCard
-            areas={AREAS}
-            area={area}
-            setArea={setArea}
-            homeType={homeType}
-            setHomeType={setHomeType}
-            budget={budget}
-            setBudget={setBudget}
-            onSearch={() => {}}
-          />
+        {/* 3. SearchCard (Floating over Hero + Dark Band) & 4. Full-Bleed Obsidian TrustBar */}
+        <section className="gh-search-band" aria-label="Property search and trust highlights">
+          <div className="gh-wrap">
+            <SearchCard
+              areas={AREAS}
+              area={area}
+              setArea={setArea}
+              homeType={homeType}
+              setHomeType={setHomeType}
+              budget={budget}
+              setBudget={setBudget}
+              onSearch={() => {}}
+            />
+          </div>
+          <div className="gh-trust-section">
+            <div className="gh-wrap">
+              <TrustBar />
+            </div>
+          </div>
+        </section>
 
-          {/* 4. TrustBar */}
-          <TrustBar />
+        <div className="gh-wrap">
 
           {/* 5. Filters & 6. PropertyCards */}
           <section className="gh-block" id="homes" aria-label="Featured properties">

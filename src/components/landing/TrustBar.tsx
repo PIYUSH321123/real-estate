@@ -13,18 +13,19 @@ export function TrustBar() {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.75"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="size-5.5"
           >
             <path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3Z" />
             <path d="m9 12 2 2 4-4" />
           </svg>
         </span>
-        <p>
-          <b>MahaRERA registered</b>
+        <div>
+          <b>MahaRERA</b>
           <span>Reg. {SITE_CONFIG.rera.number}</span>
-        </p>
+        </div>
       </div>
 
       {/* 2. 0% Brokerage */}
@@ -34,19 +35,20 @@ export function TrustBar() {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.75"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="size-5.5"
           >
             <path d="M19 5 5 19" />
             <circle cx="7" cy="7" r="2.5" />
             <circle cx="17" cy="17" r="2.5" />
           </svg>
         </span>
-        <p>
+        <div>
           <b>{SITE_CONFIG.brokerageClaim.badgeText}</b>
           <span>Direct developer pricing</span>
-        </p>
+        </div>
       </div>
 
       {/* 3. Families Assisted */}
@@ -56,19 +58,20 @@ export function TrustBar() {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.75"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="size-5.5"
           >
             <circle cx="9" cy="8" r="3.5" />
             <path d="M2.5 20c.6-3.5 3.2-5.5 6.5-5.5s5.9 2 6.5 5.5" />
             <path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.9.7 3.1 2.4 3.5 5.2" />
           </svg>
         </span>
-        <p>
-          <b>1,200+ Pune families</b>
-          <span>Guided to their homes</span>
-        </p>
+        <div>
+          <b>1,200+</b>
+          <span>Pune families guided</span>
+        </div>
       </div>
 
       {/* 4. Free AC Cab Visits */}
@@ -78,9 +81,10 @@ export function TrustBar() {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.75"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="size-5.5"
           >
             <path d="M3 15v-3l2-5h14l2 5v3" />
             <path d="M3 15h18v3H3z" />
@@ -88,10 +92,10 @@ export function TrustBar() {
             <circle cx="16.5" cy="18" r="1.5" />
           </svg>
         </span>
-        <p>
-          <b>Free AC cab visits</b>
+        <div>
+          <b>Free AC Cab</b>
           <span>Doorstep pickup and drop</span>
-        </p>
+        </div>
       </div>
     </div>
   );

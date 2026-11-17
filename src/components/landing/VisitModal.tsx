@@ -203,7 +203,7 @@ export function VisitModal({
           }}
         >
           <div>
-            <span className="gh-eyebrow" style={{ color: "#5EE0B8" }}>
+            <span className="gh-eyebrow" style={{ color: "#E5D4B7" }}>
               Free site visit · Free AC cab
             </span>
             <h2
