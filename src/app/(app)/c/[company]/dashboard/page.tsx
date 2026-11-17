@@ -101,9 +101,25 @@ export default function DashboardPage() {
   // Alert strip dismiss
   const [showAlert, setShowAlert] = React.useState(true)
 
-  // Follow-ups state with sorting and bulk completion
-  const [followUps, setFollowUps] = React.useState<FollowUpTask[]>(gharsetuStore.followUps)
+  // Live CRM store states (leads, site visits, follow-ups)
+  const [leads, setLeads] = React.useState<Lead[]>(() => [...gharsetuStore.leads])
+  const [siteVisits, setSiteVisits] = React.useState<SiteVisit[]>(() => [...gharsetuStore.siteVisits])
+  const [followUps, setFollowUps] = React.useState<FollowUpTask[]>(() => [...gharsetuStore.followUps])
   const [selectedTasks, setSelectedTasks] = React.useState<Record<string, boolean>>({})
+
+  React.useEffect(() => {
+    gharsetuStore.hydrateFromStorage()
+    setLeads([...gharsetuStore.leads])
+    setSiteVisits([...gharsetuStore.siteVisits])
+    setFollowUps([...gharsetuStore.followUps])
+    const unsub = gharsetuStore.subscribe(() => {
+      setLeads([...gharsetuStore.leads])
+      setSiteVisits([...gharsetuStore.siteVisits])
+      setFollowUps([...gharsetuStore.followUps])
+    })
+    gharsetuStore.syncFromServer()
+    return unsub
+  }, [])
 
   // Command palette & Lead side panel state
   const [commandPaletteOpen, setCommandPaletteOpen] = React.useState(false)
@@ -156,20 +172,20 @@ export default function DashboardPage() {
 
   // Handle Quick Task Actions
   const handleTaskDone = (taskId: string, leadName: string) => {
-    setFollowUps((prev) => prev.filter((t) => t.id !== taskId))
+    const next = followUps.filter((t) => t.id !== taskId)
+    gharsetuStore.updateFollowUps(next)
     toast.success("Follow-up Completed", {
       description: `Task for ${leadName} marked as completed.`,
     })
   }
 
   const handleTaskSnooze = (taskId: string, leadName: string) => {
-    setFollowUps((prev) =>
-      prev.map((t) =>
-        t.id === taskId
-          ? { ...t, status: "Due today" as const, overdueDays: undefined, dueTime: "Tomorrow" }
-          : t
-      )
+    const next = followUps.map((t) =>
+      t.id === taskId
+        ? { ...t, status: "Due today" as const, overdueDays: undefined, dueTime: "Tomorrow" }
+        : t
     )
+    gharsetuStore.updateFollowUps(next)
     toast.success("Task Snoozed +1 Day", {
       description: `Follow-up for ${leadName} moved to tomorrow.`,
     })
@@ -179,7 +195,8 @@ export default function DashboardPage() {
     const idsToComplete = Object.keys(selectedTasks).filter((id) => selectedTasks[id])
     if (idsToComplete.length === 0) return
 
-    setFollowUps((prev) => prev.filter((t) => !idsToComplete.includes(t.id)))
+    const next = followUps.filter((t) => !idsToComplete.includes(t.id))
+    gharsetuStore.updateFollowUps(next)
     setSelectedTasks({})
     toast.success(`${idsToComplete.length} Tasks Marked Done`, {
       description: "Batch task updates committed.",
@@ -188,22 +205,24 @@ export default function DashboardPage() {
 
   const openLeadDrawer = (leadId: string) => {
     const lead =
-      gharsetuStore.leads.find((l) => l.id === leadId) ||
-      gharsetuStore.leads.find((l) => l.id === "lead-3") ||
-      gharsetuStore.leads[0]
+      leads.find((l) => l.id === leadId) ||
+      leads.find((l) => l.id === "lead-3") ||
+      leads[0]
     setSelectedLeadForPanel(lead)
     setSidePanelOpen(true)
   }
 
-  // Reactive KPI calculation based on date range & role
+  // Reactive KPI calculation based on date range, role & live CRM bookings
   const kpiData = React.useMemo(() => {
     const multiplier = dateRange === "today" ? 0.3 : dateRange === "30d" ? 3.8 : 1
     const roleFactor = activeRole === "agent" ? 0.5 : 1
+    const extraLeads = Math.max(0, leads.length - 8)
+    const extraVisits = Math.max(0, siteVisits.length - 3)
 
     return {
-      newLeads: Math.round(24 * multiplier * roleFactor),
+      newLeads: Math.round(24 * multiplier * roleFactor) + extraLeads,
       leadsDelta: "+25% vs last period",
-      siteVisits: Math.round(11 * multiplier * roleFactor),
+      siteVisits: Math.round(11 * multiplier * roleFactor) + extraVisits,
       visitsDelta: "+18% vs last period",
       followUpsDue: followUps.length,
       overdueCount: followUps.filter((t) => t.status === "Overdue").length,
@@ -211,7 +230,7 @@ export default function DashboardPage() {
       pipelineDeals: activeRole === "agent" ? "4 in negotiation" : "9 in negotiation",
       pipelineDelta: "+8% vs last month",
     }
-  }, [dateRange, activeRole, followUps])
+  }, [dateRange, activeRole, followUps, leads.length, siteVisits.length])
 
   // Sorted follow-ups: Overdue first, then due today
   const sortedFollowUps = React.useMemo(() => {
@@ -1079,8 +1098,8 @@ export default function DashboardPage() {
                 </span>
               </div>
 
-              <div className="flex flex-col gap-3">
-                {INITIAL_SITE_VISITS.map((visit) => (
+              <div className="flex flex-col gap-3 max-h-[260px] overflow-y-auto pr-1">
+                {siteVisits.slice(0, 5).map((visit) => (
                   <div
                     key={visit.id}
                     className="p-2.5 rounded-xl border border-[#E3E7E4] bg-[#F6F7F5] flex items-center justify-between"
@@ -1091,7 +1110,7 @@ export default function DashboardPage() {
                         <span className="font-bold text-xs text-[#14211C]">{visit.leadName}</span>
                       </div>
                       <span className="text-[11px] text-[#5B6B65]">
-                        {visit.propertyTitle} ({visit.locality})
+                        {visit.propertyTitle} ({visit.locality}) · {visit.date}
                       </span>
                     </div>
 

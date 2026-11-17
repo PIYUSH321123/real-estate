@@ -46,6 +46,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { useParams, usePathname } from "next/navigation"
+import { gharsetuStore } from "@/lib/mock/store"
 
 interface NavItem {
     title: string
@@ -181,6 +182,28 @@ export function AppSidebar({
     const { open, state } = useSidebar()
     const isIconOnly = state === "collapsed"
 
+    // Live CRM counts for sidebar badges
+    const [liveCounts, setLiveCounts] = React.useState({
+        leads: gharsetuStore.leads.length,
+        visits: gharsetuStore.siteVisits.length,
+        followUps: gharsetuStore.followUps.length,
+    })
+
+    React.useEffect(() => {
+        gharsetuStore.hydrateFromStorage()
+        const update = () => {
+            setLiveCounts({
+                leads: gharsetuStore.leads.length,
+                visits: gharsetuStore.siteVisits.length,
+                followUps: gharsetuStore.followUps.length,
+            })
+        }
+        update()
+        const unsub = gharsetuStore.subscribe(update)
+        gharsetuStore.syncFromServer()
+        return unsub
+    }, [])
+
     // Persisted expanded group states
     const [collapsedGroups, setCollapsedGroups] = React.useState<Record<string, boolean>>(() => {
         if (typeof window !== "undefined") {
@@ -266,6 +289,14 @@ export function AppSidebar({
                                                     pathname === resolvedUrl ||
                                                     (item.url !== "/c/[company]/dashboard" && pathname.startsWith(resolvedUrl))
                                                 const Icon = item.icon
+                                                const liveBadge =
+                                                    item.title === "Leads & Pipeline"
+                                                        ? String(liveCounts.leads)
+                                                        : item.title === "Site Visits"
+                                                        ? String(liveCounts.visits)
+                                                        : item.title === "Follow-ups"
+                                                        ? String(liveCounts.followUps)
+                                                        : item.badge
 
                                                 const buttonContent = (
                                                     <SidebarMenuButton
@@ -290,9 +321,9 @@ export function AppSidebar({
                                                             <span className="truncate flex-1 group-data-[collapsible=icon]:hidden">
                                                                 {item.title}
                                                             </span>
-                                                            {item.badge && (
+                                                            {liveBadge && (
                                                                 <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-[#0F766E] text-[#E3F2EF] group-data-[collapsible=icon]:hidden">
-                                                                    {item.badge}
+                                                                    {liveBadge}
                                                                 </span>
                                                             )}
                                                         </a>
@@ -305,7 +336,7 @@ export function AppSidebar({
                                                             <Tooltip>
                                                                 <TooltipTrigger asChild>{buttonContent}</TooltipTrigger>
                                                                 <TooltipContent side="right" className="bg-[#0F2F2A] text-white border-[#17564D] text-xs font-semibold">
-                                                                    {item.title} {item.badge ? `(${item.badge})` : ""}
+                                                                    {item.title} {liveBadge ? `(${liveBadge})` : ""}
                                                                 </TooltipContent>
                                                             </Tooltip>
                                                         </SidebarMenuItem>

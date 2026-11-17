@@ -33,7 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { INITIAL_SITE_VISITS } from "@/lib/mock/gharsetu"
+import { gharsetuStore } from "@/lib/mock/store"
 import { SiteVisit } from "@/types/real-estate"
 import { toast } from "sonner"
 
@@ -41,8 +41,18 @@ export default function SiteVisitsPage() {
   const params = useParams()
   const companySlug = (Array.isArray(params.company) ? params.company[0] : params.company) || "demo"
 
-  const [visits, setVisits] = React.useState<SiteVisit[]>(INITIAL_SITE_VISITS)
+  const [visits, setVisits] = React.useState<SiteVisit[]>(() => [...gharsetuStore.siteVisits])
   const [dialogOpen, setDialogOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    gharsetuStore.hydrateFromStorage()
+    setVisits([...gharsetuStore.siteVisits])
+    const unsub = gharsetuStore.subscribe(() => {
+      setVisits([...gharsetuStore.siteVisits])
+    })
+    gharsetuStore.syncFromServer()
+    return unsub
+  }, [])
 
   // Schedule visit form
   const [leadName, setLeadName] = React.useState("")
@@ -52,26 +62,35 @@ export default function SiteVisitsPage() {
   const [time, setTime] = React.useState("11:00 AM")
   const [date, setDate] = React.useState("Saturday, 18 Nov")
 
-  const handleScheduleSubmit = (e: React.FormEvent) => {
+  const handleScheduleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!leadName) return
 
-    const newVisit: SiteVisit = {
-      id: `visit-${Date.now()}`,
+    const visitData = {
       leadId: `lead-${Date.now()}`,
       leadName,
       leadMobile: leadMobile || "+91 98000 00000",
-      propertyId: "prop-1",
+      propertyId: "skyline",
       propertyTitle: project,
       locality,
       date,
       time,
-      status: "Confirmed",
+      status: "Confirmed" as const,
       agentName: "Sameer Khan",
       routeOrder: visits.length + 1,
     }
 
-    setVisits([...visits, newVisit])
+    gharsetuStore.addSiteVisit(visitData)
+    try {
+      await fetch("/api/site-visits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(visitData),
+      })
+    } catch {
+      // Already saved locally
+    }
+
     setLeadName("")
     setLeadMobile("")
     setDialogOpen(false)
@@ -81,9 +100,7 @@ export default function SiteVisitsPage() {
   }
 
   const handleGeoCheckIn = (visitId: string) => {
-    setVisits((prev) =>
-      prev.map((v) => (v.id === visitId ? { ...v, geoCheckedIn: true } : v))
-    )
+    gharsetuStore.updateSiteVisit(visitId, { geoCheckedIn: true, status: "Completed" })
     toast.success("Geo Check-in Verified", {
       description: "GPS coordinates verified at project site. Visit logged as completed.",
     })

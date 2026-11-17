@@ -49,11 +49,21 @@ export default function LeadsPipelinePage() {
   const router = useRouter()
   const companySlug = (Array.isArray(params.company) ? params.company[0] : params.company) || "demo"
 
-  const [leads, setLeads] = React.useState<Lead[]>(gharsetuStore.leads)
+  const [leads, setLeads] = React.useState<Lead[]>(() => [...gharsetuStore.leads])
   const [searchTerm, setSearchTerm] = React.useState("")
   const [sourceFilter, setSourceFilter] = React.useState("all")
   const [agentFilter, setAgentFilter] = React.useState("all")
   const [dialogOpen, setDialogOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    gharsetuStore.hydrateFromStorage()
+    setLeads([...gharsetuStore.leads])
+    const unsub = gharsetuStore.subscribe(() => {
+      setLeads([...gharsetuStore.leads])
+    })
+    gharsetuStore.syncFromServer()
+    return unsub
+  }, [])
 
   // New lead form
   const [leadName, setLeadName] = React.useState("")

@@ -40,9 +40,19 @@ export default function FollowUpsPage() {
   const params = useParams()
   const companySlug = (Array.isArray(params.company) ? params.company[0] : params.company) || "demo"
 
-  const [tasks, setTasks] = React.useState(gharsetuStore.followUps)
+  const [tasks, setTasks] = React.useState(() => [...gharsetuStore.followUps])
   const [scorecards] = React.useState(INITIAL_SCORECARDS)
   const [dialogOpen, setDialogOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    gharsetuStore.hydrateFromStorage()
+    setTasks([...gharsetuStore.followUps])
+    const unsub = gharsetuStore.subscribe(() => {
+      setTasks([...gharsetuStore.followUps])
+    })
+    gharsetuStore.syncFromServer()
+    return unsub
+  }, [])
 
   // Form states
   const [taskLead, setTaskLead] = React.useState("")
@@ -54,19 +64,16 @@ export default function FollowUpsPage() {
     e.preventDefault()
     if (!taskLead || !taskDesc) return
 
-    const newTask = {
-      id: `task-${Date.now()}`,
+    gharsetuStore.addFollowUp({
       leadId: `lead-${Date.now()}`,
       leadName: taskLead,
       task: taskDesc,
       agentName: taskAgent,
       dueDate: taskDate,
-      status: "Due today" as const,
-      priority: "High" as const,
-    }
+      status: "Due today",
+      priority: "High",
+    })
 
-    gharsetuStore.followUps.unshift(newTask)
-    setTasks([...gharsetuStore.followUps])
     setTaskLead("")
     setTaskDesc("")
     setDialogOpen(false)

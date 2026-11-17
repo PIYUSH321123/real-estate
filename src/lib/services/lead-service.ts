@@ -1,5 +1,5 @@
 import { gharsetuStore } from "@/lib/mock/store";
-import { Lead } from "@/types/real-estate";
+import { FollowUpTask, Lead, SiteVisit } from "@/types/real-estate";
 
 export interface WebsiteLeadSubmission {
   name: string;
@@ -21,15 +21,26 @@ export interface WebsiteLeadSubmission {
   honeypot?: string; // Hidden spam trap
 }
 
-// In-memory rate limiting map (clean Mobile -> timestamp)
+export interface LeadSubmissionResult {
+  success: boolean;
+  message: string;
+  leadId?: string;
+  visitId?: string;
+  lead?: Lead;
+  siteVisit?: SiteVisit;
+  followUp?: FollowUpTask;
+}
+
+// In-memory rate limiting map (clean Mobile + inquiryType -> timestamp)
 const recentSubmissions = new Map<string, number>();
 
-export async function submitWebsiteLead(
-  data: WebsiteLeadSubmission
-): Promise<{ success: boolean; message: string; leadId?: string }> {
+/**
+ * Core processor that validates and creates Lead + SiteVisit (if visit) + FollowUpTask
+ * in the active GharsetuStore. Used on the server (/api/leads) and as client fallback.
+ */
+export function processWebsiteLead(data: WebsiteLeadSubmission): LeadSubmissionResult {
   // 1. Anti-spam honeypot verification
   if (data.honeypot && data.honeypot.trim().length > 0) {
-    // Silently return success to bot without saving
     return { success: true, message: "Thank you for reaching out." };
   }
 
@@ -37,7 +48,6 @@ export async function submitWebsiteLead(
   const cleanName = (data.name || "").trim();
   let cleanMobile = (data.mobile || "").replace(/\D/g, "").trim();
 
-  // Handle +91 or 91 country code prefix for Indian numbers
   if (cleanMobile.length === 12 && cleanMobile.startsWith("91")) {
     cleanMobile = cleanMobile.slice(2);
   }
@@ -50,67 +60,202 @@ export async function submitWebsiteLead(
     return { success: false, message: "Enter a valid 10-digit mobile number." };
   }
 
-  // 3. De-duplicate rapid submissions (within 60 seconds)
+  // 3. De-duplicate rapid double-clicks (within 10 seconds for same phone + property)
+  const inquiryType = data.inquiryType || "visit";
+  const dedupeKey = `${cleanMobile}:${inquiryType}:${data.propertyId || "any"}`;
   const now = Date.now();
-  const lastSubmitTime = recentSubmissions.get(cleanMobile);
-  if (lastSubmitTime && now - lastSubmitTime < 60000) {
+  const lastSubmitTime = recentSubmissions.get(dedupeKey);
+  if (lastSubmitTime && now - lastSubmitTime < 10000) {
     return {
       success: true,
-      message: `Thanks, ${cleanName.split(" ")[0]}. Your request is noted. We will confirm on WhatsApp.`,
+      message: `Thanks, ${cleanName.split(" ")[0]}. Your request is already registered in our CRM.`,
     };
   }
-  recentSubmissions.set(cleanMobile, now);
+  recentSubmissions.set(dedupeKey, now);
 
-  // 4. Clean up stale keys in rate-limit map
   if (recentSubmissions.size > 200) {
-    for (const [phone, timestamp] of recentSubmissions.entries()) {
+    for (const [key, timestamp] of recentSubmissions.entries()) {
       if (now - timestamp > 3600000) {
-        recentSubmissions.delete(phone);
+        recentSubmissions.delete(key);
       }
     }
   }
 
-  // 5. Build CRM Lead record
-  const locality = data.locality || "Baner, Pune";
-  const bhk = data.bhk || "3 BHK";
-  const propertyNote = data.propertyTitle ? `Selected Home: ${data.propertyTitle}` : "";
-  const dayNote = data.preferredDay ? `Preferred Day: ${data.preferredDay}` : "";
-  const typeNote = data.inquiryType === "callback" ? "Requested Callback" : "Free Site Visit Booking";
-  const utmNotes = [
-    data.utmSource ? `Source: ${data.utmSource}` : "",
-    data.utmMedium ? `Medium: ${data.utmMedium}` : "",
-    data.utmCampaign ? `Campaign: ${data.utmCampaign}` : "",
-  ].filter(Boolean).join(" | ");
+  // 4. Resolve matched property metadata from store if available
+  const matchedProp = gharsetuStore.properties.find(
+    (p) => p.id === data.propertyId || p.slug === data.propertyId || p.title === data.propertyTitle
+  );
 
-  const combinedNotes = [typeNote, propertyNote, dayNote, utmNotes, data.notes]
+  const propertyId = matchedProp?.id || data.propertyId || "skyline";
+  const propertyTitle = matchedProp?.title || data.propertyTitle || "Skyline Heights";
+  const locality = matchedProp?.locality || data.locality || "Baner";
+  const bhk = matchedProp?.bhk || data.bhk || "3 BHK";
+  const budgetDisplay = matchedProp?.priceDisplay || data.budgetDisplay || "₹1.45 Cr";
+  const preferredDay = data.preferredDay || "This Saturday";
+
+  const typeNote =
+    inquiryType === "callback" ? "Requested Callback" : "Free Site Visit Booking";
+  const utmNotes = [
+    data.utmSource ? `utm_source=${data.utmSource}` : "",
+    data.utmMedium ? `utm_medium=${data.utmMedium}` : "",
+    data.utmCampaign ? `utm_campaign=${data.utmCampaign}` : "",
+  ]
+    .filter(Boolean)
+    .join(" | ");
+
+  const combinedNotes = [
+    typeNote,
+    `Selected Home: ${propertyTitle} (${locality})`,
+    `Preferred Day: ${preferredDay}`,
+    utmNotes,
+    data.notes,
+  ]
     .filter(Boolean)
     .join(" • ");
 
-  const tags = ["Website", data.inquiryType === "callback" ? "Callback Request" : "Site Visit Request"];
-  if (data.propertyTitle) tags.push(data.propertyTitle);
-  if (data.bhk) tags.push(data.bhk);
+  const tags = [
+    "Website",
+    inquiryType === "callback" ? "Callback Request" : "Site Visit Booked",
+    propertyTitle,
+  ];
+  if (bhk) tags.push(bhk);
 
+  const formattedMobile = `+91 ${cleanMobile.slice(0, 5)} ${cleanMobile.slice(5)}`;
+  const timestampStr = new Date().toLocaleTimeString("en-IN", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  // 5. Register Lead in CRM
   const newLead = gharsetuStore.addLead({
     name: cleanName,
-    mobile: `+91 ${cleanMobile}`,
+    mobile: formattedMobile,
     email: data.email || `${cleanName.toLowerCase().replace(/\s+/g, ".")}@gmail.com`,
     bhk,
-    budgetDisplay: data.budgetDisplay || "₹82 L - ₹1.45 Cr",
+    budgetDisplay,
     locality,
     city: "Pune",
     source: "Website",
     assignedAgent: "Sameer Khan",
     assignedAgentId: "agent-sameer",
-    status: "New",
-    scoreReason: "High-intent website lead from landing page with direct home selection",
-    nextBestAction: data.inquiryType === "callback" ? "Call buyer back within 1 hour" : "Confirm private cab slot on WhatsApp",
+    status: inquiryType === "visit" ? "Site visit" : "New",
+    score: inquiryType === "visit" ? 90 : 80,
+    heat: "Hot",
+    scoreReason:
+      inquiryType === "visit"
+        ? `Booked free AC cab site visit for ${propertyTitle} (${preferredDay})`
+        : `Requested callback on website for ${propertyTitle}`,
+    nextBestAction:
+      inquiryType === "callback"
+        ? "Call buyer back within 1 hour"
+        : `Confirm AC cab pickup for ${propertyTitle} (${preferredDay}) on WhatsApp`,
     tags,
     notes: combinedNotes,
+    activities: [
+      {
+        id: `act-${now}`,
+        type: inquiryType === "visit" ? "visit" : "form",
+        title:
+          inquiryType === "visit"
+            ? `Site visit booked: ${propertyTitle}`
+            : `Callback requested: ${propertyTitle}`,
+        description: combinedNotes,
+        timestamp: `Today, ${timestampStr}`,
+        operator: "Website Portal",
+      },
+    ],
+  });
+
+  // 6. If booking a site visit, register a SiteVisit in CRM Site Visits Schedule
+  let newSiteVisit: SiteVisit | undefined;
+  if (inquiryType === "visit") {
+    newSiteVisit = gharsetuStore.addSiteVisit({
+      leadId: newLead.id,
+      leadName: cleanName,
+      leadMobile: formattedMobile,
+      propertyId,
+      propertyTitle,
+      locality,
+      date: preferredDay,
+      time: "11:00 AM",
+      status: "Confirmed",
+      agentName: "Sameer Khan",
+      routeOrder: gharsetuStore.siteVisits.length + 1,
+    });
+  }
+
+  // 7. Register an actionable FollowUpTask in CRM Dashboard & Follow-ups Desk
+  const todayIso = new Date().toISOString().split("T")[0];
+  const newFollowUp = gharsetuStore.addFollowUp({
+    leadId: newLead.id,
+    leadName: cleanName,
+    task:
+      inquiryType === "visit"
+        ? `Confirm AC cab & visit for ${propertyTitle} (${preferredDay})`
+        : `Call back ${cleanName} regarding ${propertyTitle} (${locality})`,
+    agentName: "Sameer Khan",
+    dueDate: todayIso,
+    dueTime: "ASAP",
+    status: "Due today",
+    priority: "High",
   });
 
   return {
     success: true,
-    message: `Thanks, ${cleanName.split(" ")[0]}. Your ${data.inquiryType === "callback" ? "call back" : "visit"} request is noted. We will confirm on WhatsApp.`,
+    message: `Thanks, ${cleanName.split(" ")[0]}. Your ${
+      inquiryType === "callback" ? "call back" : "visit"
+    } request is registered in our CRM. We will confirm on WhatsApp.`,
     leadId: newLead.id,
+    visitId: newSiteVisit?.id,
+    lead: newLead,
+    siteVisit: newSiteVisit,
+    followUp: newFollowUp,
   };
+}
+
+/**
+ * Client-callable entry point: posts to /api/leads on the server AND persists
+ * immediately into the browser's gharsetuStore + localStorage for instant CRM sync.
+ */
+export async function submitWebsiteLead(
+  data: WebsiteLeadSubmission
+): Promise<LeadSubmissionResult> {
+  // Server-side direct execution
+  if (typeof window === "undefined") {
+    return processWebsiteLead(data);
+  }
+
+  // Browser execution: POST to /api/leads first so server memory/DB registers it too
+  try {
+    const res = await fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const json = await res.json();
+    if (!res.ok) {
+      return {
+        success: false,
+        message: json.error || "Please check your details and try again.",
+      };
+    }
+
+    // Mirror exact server-created records into browser store + localStorage
+    if (json.lead) {
+      gharsetuStore.addLead(json.lead);
+    }
+    if (json.siteVisit) {
+      gharsetuStore.addSiteVisit(json.siteVisit);
+    }
+    if (json.followUp) {
+      gharsetuStore.addFollowUp(json.followUp);
+    }
+
+    return json as LeadSubmissionResult;
+  } catch (err) {
+    console.warn("API submission unreachable, saving locally to CRM store:", err);
+    return processWebsiteLead(data);
+  }
 }
