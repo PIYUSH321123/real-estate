@@ -38,9 +38,11 @@ export function PropertyCard({
           src={imgSrc}
           alt={`Exterior view of ${property.title} in ${property.locality}, ${property.city}`}
           fill
-          className="object-cover"
+          className="object-cover gh-card-img"
           sizes="(max-width: 640px) 100vw, (max-width: 1020px) 50vw, 33vw"
         />
+
+        <div className="gh-card-scrim" aria-hidden="true" />
 
         <span className={`gh-badge ${statusClass}`}>{property.status}</span>
 
@@ -48,14 +50,16 @@ export function PropertyCard({
           type="button"
           className="gh-save"
           aria-pressed={isSaved}
-          aria-label={isSaved ? `Remove ${property.title} from saved homes` : `Save ${property.title}`}
+          aria-label={
+            isSaved ? `Remove ${property.title} from saved homes` : `Save ${property.title}`
+          }
           onClick={() => onToggleSave(property.id, property.title)}
         >
           <svg
             viewBox="0 0 24 24"
             fill={isSaved ? "currentColor" : "none"}
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.9"
             strokeLinecap="round"
             strokeLinejoin="round"
             className="size-4.5"
@@ -64,6 +68,26 @@ export function PropertyCard({
             <path d="M12 20s-7-4.4-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.6-9 9-9 9Z" />
           </svg>
         </button>
+
+        <div className="gh-card-photo-meta">
+          <span className="gh-card-photo-loc">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-3.5 shrink-0"
+              aria-hidden="true"
+            >
+              <path d="M12 21s7-6.2 7-11.5a7 7 0 1 0-14 0C5 14.8 12 21 12 21Z" />
+              <circle cx="12" cy="9.5" r="2.5" />
+            </svg>
+            {property.locality}, {property.city}
+          </span>
+          <span className="gh-card-photo-tag">{property.type}</span>
+        </div>
       </div>
 
       <div className="gh-card-body">
@@ -74,32 +98,13 @@ export function PropertyCard({
 
         <h3>{property.title}</h3>
 
-        <div className="gh-loc">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="size-4 shrink-0"
-            aria-hidden="true"
-          >
-            <path d="M12 21s7-6.2 7-11.5a7 7 0 1 0-14 0C5 14.8 12 21 12 21Z" />
-            <circle cx="12" cy="9.5" r="2.5" />
-          </svg>
-          <span>
-            {property.locality}, {property.city}
-          </span>
-        </div>
-
         <div className="gh-specs">
           <span>
             <svg
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="1.9"
               strokeLinecap="round"
               strokeLinejoin="round"
               className="size-4"
@@ -110,12 +115,13 @@ export function PropertyCard({
             </svg>
             {property.bhk}
           </span>
+          <span className="gh-spec-dot" aria-hidden="true" />
           <span>
             <svg
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="1.9"
               strokeLinecap="round"
               strokeLinejoin="round"
               className="size-4"
@@ -134,7 +140,7 @@ export function PropertyCard({
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.9"
             strokeLinecap="round"
             strokeLinejoin="round"
             className="size-3.5 shrink-0"
@@ -149,17 +155,30 @@ export function PropertyCard({
         <div className="gh-acts">
           <button
             type="button"
-            className="gh-btn gh-btn-brand"
+            className="gh-btn gh-btn-ghost"
             onClick={() => onViewDetails(property)}
           >
             View details
           </button>
           <button
             type="button"
-            className="gh-btn gh-btn-ghost"
+            className="gh-btn gh-btn-cta"
             onClick={() => onBookVisit(property)}
           >
-            Book visit
+            <span>Book visit</span>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-3.5"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
           </button>
         </div>
       </div>

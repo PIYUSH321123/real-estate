@@ -215,10 +215,12 @@ export default function GharsetuPublicLandingPage() {
               setChip("all");
             }}
           />
+        </div>
 
-          {/* 8. Steps */}
-          <Steps />
+        {/* 8. Steps (Full-Bleed Editorial Obsidian Process Band) */}
+        <Steps />
 
+        <div className="gh-wrap">
           {/* 9. Reviews */}
           <Reviews />
 
@@ -226,7 +228,7 @@ export default function GharsetuPublicLandingPage() {
           <FAQ />
         </div>
 
-        {/* 11. VisitForm (Dark Teal Band Section) */}
+        {/* 11. VisitForm (Dark Obsidian Band Section) */}
         <VisitForm
           properties={properties}
           selectedPropertyId={selectedVisitPropertyId}
@@ -235,7 +237,7 @@ export default function GharsetuPublicLandingPage() {
       </main>
 
       {/* 12. Footer */}
-      <Footer />
+      <Footer companySlug={companySlug} />
 
       {/* 13. MobileBar (Fixed on mobile <= 640px) */}
       <MobileBar />

@@ -608,6 +608,41 @@
   max-width: 46ch;
 }
 
+/* Champagne Editorial Eyebrow Pill */
+.gh-pill-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--accent-border);
+  background: var(--accent-soft);
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-family: var(--f-body);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.gh-pill-eyebrow i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+}
+
+.gh-pill-eyebrow-dark {
+  background: rgba(229, 212, 183, 0.1);
+  border-color: rgba(229, 212, 183, 0.28);
+  color: #E5D4B7;
+}
+
+.gh-pill-eyebrow-dark i {
+  background: #E5D4B7;
+}
+
 /* Filter Chips */
 .gh-chips {
   display: flex;
@@ -636,10 +671,14 @@
 .gh-count {
   font-size: 14px;
   color: var(--muted);
-  margin: 14px 0 20px;
+  margin: 14px 0 22px;
 }
 
-/* Property Grid & Cards */
+.gh-count b {
+  color: var(--ink);
+}
+
+/* Property Grid & Luxury Editorial Cards */
 .gh-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -653,7 +692,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .gh-card:hover {
@@ -669,13 +708,69 @@
   background: #14171A;
 }
 
+.gh-card-img {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gh-card:hover .gh-card-img {
+  transform: scale(1.05);
+}
+
+.gh-card-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 12, 14, 0.12) 0%,
+    rgba(10, 12, 14, 0) 48%,
+    rgba(10, 12, 14, 0.72) 100%
+  );
+  pointer-events: none;
+}
+
+.gh-card-photo-meta {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  z-index: 2;
+}
+
+.gh-card-photo-loc {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #FFFFFF;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.gh-card-photo-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #F4ECE0;
+  background: rgba(17, 19, 21, 0.65);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+
 .gh-badge {
   position: absolute;
   left: 12px;
   top: 12px;
-  font-size: 11px;
+  z-index: 2;
+  font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 5px 11px;
   border-radius: 99px;
@@ -700,6 +795,7 @@
   position: absolute;
   right: 12px;
   top: 12px;
+  z-index: 2;
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -716,7 +812,7 @@
 }
 
 .gh-card-body {
-  padding: 18px 20px 20px;
+  padding: 20px 22px 22px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -732,45 +828,51 @@
 
 .gh-price {
   font-family: var(--f-display);
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 700;
   color: var(--ink);
   letter-spacing: -0.02em;
+  line-height: 1;
 }
 
 .gh-psf {
-  font-size: 12.5px;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--muted);
+  background: var(--chip);
+  padding: 4px 10px;
+  border-radius: 6px;
   font-variant-numeric: tabular-nums;
 }
 
 .gh-card h3 {
-  font-size: 23px;
+  font-size: 24px;
   font-weight: 600;
   color: var(--ink);
-}
-
-.gh-loc {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  font-size: 13.5px;
-  color: var(--muted);
 }
 
 .gh-specs {
   display: flex;
-  gap: 16px;
+  gap: 12px;
+  align-items: center;
   flex-wrap: wrap;
   font-size: 13.5px;
   font-weight: 600;
   color: var(--ink);
+  padding-top: 2px;
 }
 
 .gh-specs span {
   display: inline-flex;
   gap: 6px;
   align-items: center;
+}
+
+.gh-spec-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-border);
 }
 
 .gh-specs svg {
@@ -790,7 +892,7 @@
   gap: 6px;
   align-items: center;
   border-top: 1px solid var(--line);
-  padding-top: 10px;
+  padding-top: 11px;
   margin-top: auto;
 }
 
@@ -802,7 +904,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .gh-acts .gh-btn {
@@ -819,114 +921,235 @@
   color: var(--muted);
 }
 
-/* Areas */
+/* ========================================================= */
+/* AREAS — Editorial Neighbourhood Showcase                  */
+/* ========================================================= */
 .gh-areas {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 16px;
 }
 
 .gh-area {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  gap: 10px;
+  gap: 18px;
   text-align: left;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 20px 22px;
+  border-radius: 16px;
+  padding: 22px 24px;
   cursor: pointer;
-  transition: border-color 0.15s, transform 0.15s;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .gh-area:hover {
   border-color: var(--accent);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.gh-area-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.gh-area-idx {
+  font-family: var(--f-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.gh-area-main {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
 }
 
 .gh-area b {
   font-family: var(--f-display);
-  font-size: 24px;
+  font-size: 27px;
   font-weight: 600;
   display: block;
   color: var(--ink);
+  line-height: 1.08;
 }
 
 .gh-area span {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
+  display: block;
+  margin-top: 4px;
 }
 
 .gh-area em {
   font-style: normal;
-  font-size: 12.5px;
-  font-weight: 600;
+  font-size: 11.5px;
+  font-weight: 700;
   color: var(--chip-ink);
   background: var(--chip);
-  padding: 5px 12px;
+  padding: 4px 11px;
   border-radius: 99px;
   white-space: nowrap;
 }
 
-/* Steps */
+.gh-area-arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  flex: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.gh-area:hover .gh-area-arrow {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: var(--on-brand);
+  transform: translateX(3px);
+}
+
+/* ========================================================= */
+/* STEPS — Full-Bleed Obsidian Process Band                  */
+/* ========================================================= */
+.gh-steps-band {
+  margin-top: 84px;
+  background: var(--band);
+  color: var(--band-ink);
+  padding-block: 76px;
+  border-block: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.gh-head-dark h2 {
+  color: #FFFFFF;
+}
+
+.gh-head-dark p {
+  color: var(--band-muted);
+}
+
 .gh-steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px;
 }
 
-.gh-step {
-  background: var(--surface);
-  border: 1px solid var(--line);
+.gh-step-dark {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 16px;
-  padding: 26px;
+  padding: 28px 26px;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-.gh-step-num {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: var(--accent-soft);
-  border: 1px solid var(--accent-border);
-  color: var(--accent);
+.gh-step-dark:hover {
+  border-color: rgba(229, 212, 183, 0.35);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.gh-step-dark-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.gh-step-dark-num {
   font-family: var(--f-display);
-  font-size: 19px;
-  font-weight: 700;
-  margin-bottom: 16px;
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 1;
+  color: #E5D4B7;
 }
 
-.gh-step h3 {
-  font-size: 24px;
-  margin-bottom: 8px;
-  color: var(--ink);
+.gh-step-dark-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(229, 212, 183, 0.45), rgba(229, 212, 183, 0.05));
 }
 
-.gh-step p {
-  color: var(--muted);
+.gh-step-dark h3 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #FFFFFF;
+}
+
+.gh-step-dark p {
+  color: var(--band-muted);
   font-size: 14.5px;
+  line-height: 1.65;
 }
 
-/* Reviews */
+/* ========================================================= */
+/* REVIEWS — Luxury Editorial Testimonial Gallery            */
+/* ========================================================= */
 .gh-reviews {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
+  gap: 24px;
 }
 
 .gh-review-card {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 16px;
-  padding: 24px;
+  padding: 26px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  min-height: 230px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gh-review-card:hover {
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow);
+}
+
+.gh-review-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gh-stars {
+  display: flex;
+  gap: 3px;
+  color: var(--accent);
+}
+
+.gh-review-quote-mark {
+  font-family: var(--f-display);
+  font-size: 46px;
+  line-height: 0.6;
+  color: var(--accent-border);
+  user-select: none;
+}
+
+.gh-review-body {
+  font-size: 14.5px;
+  line-height: 1.68;
   color: var(--muted);
-  font-size: 14px;
-  min-height: 200px;
+  flex: 1;
+}
+
+.gh-review-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  margin-top: auto;
 }
 
 .gh-review-av {
@@ -941,35 +1164,102 @@
   font-weight: 700;
   font-family: var(--f-display);
   font-size: 18px;
+  flex: none;
 }
 
-.gh-review-card b {
+.gh-review-footer b {
+  display: block;
   color: var(--ink);
-  font-size: 15px;
+  font-size: 14.5px;
+  font-weight: 700;
 }
 
-/* FAQ */
+.gh-review-footer span {
+  display: block;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+/* ========================================================= */
+/* FAQ — Asymmetric Editorial 2-Column Layout                */
+/* ========================================================= */
+.gh-faq-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.gh-faq-intro h2 {
+  font-size: clamp(32px, 3.8vw, 48px);
+  font-weight: 600;
+  margin-top: 10px;
+  color: var(--ink);
+}
+
+.gh-faq-sub {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 15px;
+  max-width: 40ch;
+}
+
+.gh-concierge-box {
+  margin-top: 26px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gh-concierge-box b {
+  font-family: var(--f-display);
+  font-size: 24px;
+  color: var(--ink);
+}
+
+.gh-concierge-box p {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.gh-concierge-acts {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
 .gh-faq {
   display: grid;
-  gap: 10px;
-  max-width: 860px;
+  gap: 12px;
 }
 
 .gh-faq details {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 0 20px;
+  border-radius: 14px;
+  padding: 0 22px;
+  transition: border-color 0.2s ease;
+}
+
+.gh-faq details[open] {
+  border-color: var(--accent-border);
 }
 
 .gh-faq summary {
   cursor: pointer;
   font-weight: 600;
-  padding: 18px 0;
+  font-size: 15.5px;
+  padding: 20px 0;
   list-style: none;
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  align-items: center;
+  gap: 14px;
   color: var(--ink);
 }
 
@@ -979,19 +1269,29 @@
 
 .gh-faq summary::after {
   content: "+";
-  font-size: 22px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
   line-height: 1;
   color: var(--accent);
+  flex: none;
 }
 
 .gh-faq details[open] summary::after {
   content: "–";
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
 }
 
 .gh-faq details p {
-  padding-bottom: 18px;
+  padding-bottom: 20px;
   color: var(--muted);
   font-size: 14.5px;
+  line-height: 1.65;
 }
 
 /* Visit Band (Dark Obsidian Editorial Band) */
@@ -999,7 +1299,7 @@
   margin-top: 84px;
   background: var(--band);
   color: var(--band-ink);
-  padding-block: 72px;
+  padding-block: 76px;
 }
 
 .gh-band-grid {
@@ -1041,7 +1341,7 @@
   background: var(--surface);
   color: var(--ink);
   border-radius: 18px;
-  padding: 24px;
+  padding: 26px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
@@ -1127,24 +1427,144 @@
   font-weight: 600;
 }
 
-/* Footer */
-.gh-footer {
-  padding-block: 38px 42px;
+/* ========================================================= */
+/* LUXURY OBSIDIAN 4-COLUMN FOOTER                           */
+/* ========================================================= */
+.gh-footer-lux {
+  background: #090A0C;
+  color: #9EA4AC;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 64px;
+  padding-bottom: 40px;
   font-size: 13.5px;
-  color: var(--muted);
-  border-top: 1px solid var(--line);
-  background: var(--surface);
 }
 
-.gh-footer .gh-wrap {
+.gh-footer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) repeat(3, minmax(0, 1fr));
+  gap: 40px;
+  padding-bottom: 44px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gh-footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+.gh-footer-logo b {
+  font-family: var(--f-display);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  display: block;
+  line-height: 1;
+  color: #FFFFFF;
+}
+
+.gh-footer-logo small {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: #8E959E;
+  margin-top: 3px;
+}
+
+.gh-footer-desc {
+  margin-top: 16px;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #949BA4;
+  max-width: 34ch;
+}
+
+.gh-footer-rera {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(229, 212, 183, 0.2);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 280px;
+}
+
+.gh-footer-rera b {
+  font-family: monospace;
+  font-size: 14px;
+  color: #FFFFFF;
+}
+
+.gh-footer-rera a {
+  font-size: 12px;
+  font-weight: 600;
+  color: #E5D4B7;
+  text-decoration: none;
+  margin-top: 2px;
+}
+
+.gh-footer-rera a:hover {
+  text-decoration: underline;
+}
+
+.gh-footer-col h4 {
+  font-family: var(--f-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #E5D4B7;
+  margin: 0 0 18px;
+}
+
+.gh-footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 11px;
+}
+
+.gh-footer-col a {
+  color: #9EA4AC;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.gh-footer-col a:hover {
+  color: #FFFFFF;
+}
+
+.gh-footer-contact li {
+  line-height: 1.55;
+}
+
+.gh-footer-bottom {
+  padding-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.gh-footer-disclaimer {
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: #6E757E;
+}
+
+.gh-footer-copy {
   display: flex;
   justify-content: space-between;
-  gap: 18px;
+  align-items: center;
   flex-wrap: wrap;
-}
-
-.gh-footer b {
-  color: var(--ink);
+  gap: 12px;
+  font-size: 12.5px;
+  color: #7D848E;
 }
 
 /* Mobile Bar */
@@ -1159,6 +1579,15 @@
   .gh-steps,
   .gh-reviews {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .gh-faq-layout,
+  .gh-band-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .gh-footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
   }
   .gh-search {
     grid-template-columns: 1fr 1fr;
@@ -1183,9 +1612,6 @@
     border-right: 0;
     padding: 12px 8px;
   }
-  .gh-band-grid {
-    grid-template-columns: 1fr;
-  }
   .gh-nav,
   .gh-phone-pill {
     display: none;
@@ -1209,7 +1635,8 @@
   .gh-grid,
   .gh-areas,
   .gh-steps,
-  .gh-reviews {
+  .gh-reviews,
+  .gh-footer-grid {
     grid-template-columns: 1fr;
   }
   .gh-search-offset {
@@ -1237,8 +1664,8 @@
     border-top: 1px solid var(--line);
     padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
   }
-  .gh-footer {
-    padding-bottom: 90px;
+  .gh-footer-lux {
+    padding-bottom: 96px;
   }
 }
 

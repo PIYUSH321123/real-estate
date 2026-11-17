@@ -29,7 +29,10 @@ export function Filters({
     <>
       <div className="gh-head">
         <div>
-          <span className="gh-eyebrow">Featured homes</span>
+          <span className="gh-pill-eyebrow">
+            <i aria-hidden="true" />
+            Featured homes
+          </span>
           <h2>Inspected, price-locked, ready to visit</h2>
         </div>
 
@@ -49,7 +52,7 @@ export function Filters({
       </div>
 
       <p className="gh-count" aria-live="polite">
-        Showing {filteredCount} of {totalCount} homes
+        Showing <b>{filteredCount}</b> of {totalCount} verified properties
       </p>
     </>
   );
