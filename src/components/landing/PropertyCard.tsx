@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { Property } from "@/types/real-estate";
 
 interface PropertyCardProps {
@@ -29,17 +28,18 @@ export function PropertyCard({
       : "av";
 
   const slug = property.slug || property.id;
-  const imgSrc = property.imageUrl || `/properties/${slug}-1.jpg`;
+  const rawSrc = property.imageUrl || `/properties/${slug}-1.jpg`;
+  const imgSrc = rawSrc.includes("?") ? rawSrc : `${rawSrc}?v=2`;
 
   return (
     <article className="gh-card">
       <div className="gh-card-art">
-        <Image
+        <img
           src={imgSrc}
           alt={`Exterior view of ${property.title} in ${property.locality}, ${property.city}`}
-          fill
-          className="object-cover gh-card-img"
-          sizes="(max-width: 640px) 100vw, (max-width: 1020px) 50vw, 33vw"
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover block gh-card-img"
         />
 
         <div className="gh-card-scrim" aria-hidden="true" />

@@ -159,7 +159,15 @@ class GharsetuStore {
         this.followUps = mergeUniqueById(parsed.followUps, INITIAL_FOLLOW_UPS);
       }
       if (Array.isArray(parsed.properties)) {
-        this.properties = mergeUniqueById(parsed.properties, INITIAL_PROPERTIES);
+        const legacyIds = new Set(["prop-1", "prop-2", "prop-3", "prop-4", "prop-5", "prop-6"]);
+        const seedById = new Map(INITIAL_PROPERTIES.map((p) => [p.id, p]));
+        const cleaned = parsed.properties
+          .filter((p: Property) => p && typeof p.id === "string" && !legacyIds.has(p.id))
+          .map((p: Property) => {
+            const seed = seedById.get(p.id);
+            return seed ? { ...p, slug: seed.slug, imageUrl: seed.imageUrl } : p;
+          });
+        this.properties = mergeUniqueById(cleaned, INITIAL_PROPERTIES);
       }
       if (Array.isArray(parsed.deals)) {
         this.deals = mergeUniqueById(parsed.deals, INITIAL_DEALS);

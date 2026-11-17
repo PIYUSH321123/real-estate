@@ -332,6 +332,14 @@
   z-index: 0;
 }
 
+.gh-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
 .gh-hero-veil {
   position: absolute;
   inset: 0;
@@ -706,6 +714,15 @@
   aspect-ratio: 16 / 10;
   overflow: hidden;
   background: #14171A;
+}
+
+.gh-card-art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .gh-card-img {

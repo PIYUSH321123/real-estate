@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { Property } from "@/types/real-estate";
 import { SITE_CONFIG } from "@/config/site-config";
 
@@ -16,13 +15,12 @@ export function Hero({ propertyCount = 6, onOpenVisitModal }: HeroProps) {
     <section className="gh-hero" aria-label="Hero section">
       {/* Full-bleed local architectural hero photo */}
       <div className="gh-hero-bg" aria-hidden="true">
-        <Image
-          src="/properties/hero-luxury-residence.jpg"
+        <img
+          src="/properties/hero-luxury-residence.jpg?v=2"
           alt="Luxury modern Pune residence at golden hour"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
+          loading="eager"
+          decoding="async"
+          className="w-full h-full object-cover object-center block"
         />
       </div>
 
