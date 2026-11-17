@@ -1,22 +1,7 @@
 import React from "react";
-import { Bricolage_Grotesque, Figtree } from "next/font/google";
 import { SITE_CONFIG } from "@/config/site-config";
 import "@/components/landing/landing.css";
 import type { Metadata } from "next";
-
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-bricolage",
-  display: "swap",
-});
-
-const figtree = Figtree({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-figtree",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Gharsetu Realty | Pune Homes You Can Walk Through This Weekend",
@@ -53,7 +38,7 @@ export default function PublicLandingLayout({ children }: { children: React.Reac
   };
 
   return (
-    <div className={`${bricolage.variable} ${figtree.variable} gh-landing`}>
+    <div className="gh-landing">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -154,13 +154,13 @@ export function PropertyCard({
           >
             View details
           </button>
-          <a
-            href="#visit"
+          <button
+            type="button"
             className="gh-btn gh-btn-ghost"
             onClick={() => onBookVisit(property)}
           >
             Book visit
-          </a>
+          </button>
         </div>
       </div>
     </article>

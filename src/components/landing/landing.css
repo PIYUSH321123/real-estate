@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400..700&display=swap');
+
 /* Gharsetu Realty Public Landing Design System Tokens */
 .gh-landing {
   --bg: #F2F7F6;
@@ -26,8 +28,8 @@
   --hero-ink: #FFFFFF;
   --hero-muted: #CBE6E2;
   --shadow: 0 1px 2px rgba(7, 40, 38, .06), 0 8px 24px rgba(7, 40, 38, .08);
-  --f-display: var(--font-bricolage, 'Bricolage Grotesque'), 'Segoe UI', system-ui, sans-serif;
-  --f-body: var(--font-figtree, 'Figtree'), 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --f-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --f-body: 'Figtree', 'Segoe UI', system-ui, -apple-system, sans-serif;
 
   background: var(--bg);
   color: var(--ink);

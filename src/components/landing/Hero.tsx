@@ -8,9 +8,10 @@ import { SITE_CONFIG } from "@/config/site-config";
 interface HeroProps {
   featuredProperty?: Property | null;
   propertyCount?: number;
+  onOpenVisitModal?: () => void;
 }
 
-export function Hero({ featuredProperty, propertyCount = 6 }: HeroProps) {
+export function Hero({ featuredProperty, propertyCount = 6, onOpenVisitModal }: HeroProps) {
   const f = featuredProperty || {
     id: "skyline",
     title: "Skyline Heights",
@@ -79,9 +80,13 @@ export function Hero({ featuredProperty, propertyCount = 6 }: HeroProps) {
             Developer pricing, registered projects and a free cab to every site visit.
           </p>
           <div className="gh-hero-cta">
-            <a className="gh-btn gh-btn-cta" href="#visit">
+            <button
+              type="button"
+              className="gh-btn gh-btn-cta"
+              onClick={onOpenVisitModal}
+            >
               Book a free site visit
-            </a>
+            </button>
             <a className="gh-btn gh-btn-ghost" href="#homes">
               Browse {propertyCount} homes
             </a>

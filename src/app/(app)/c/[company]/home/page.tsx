@@ -18,6 +18,7 @@ import { Steps } from "@/components/landing/Steps";
 import { Reviews } from "@/components/landing/Reviews";
 import { FAQ } from "@/components/landing/FAQ";
 import { VisitForm } from "@/components/landing/VisitForm";
+import { VisitModal } from "@/components/landing/VisitModal";
 import { Footer } from "@/components/landing/Footer";
 import { MobileBar } from "@/components/landing/MobileBar";
 
@@ -42,6 +43,9 @@ export default function GharsetuPublicLandingPage() {
 
   // Selected property for site visit
   const [selectedVisitPropertyId, setSelectedVisitPropertyId] = React.useState<string>("");
+
+  // Modal state for Site Visit booking card
+  const [visitModalOpen, setVisitModalOpen] = React.useState(false);
 
   // Quick detail modal state
   const [detailModalProperty, setDetailModalProperty] = React.useState<Property | null>(null);
@@ -121,6 +125,7 @@ export default function GharsetuPublicLandingPage() {
 
   const handleBookVisit = (property: Property) => {
     setSelectedVisitPropertyId(property.id);
+    setVisitModalOpen(true);
   };
 
   const handleViewDetails = (property: Property) => {
@@ -137,6 +142,7 @@ export default function GharsetuPublicLandingPage() {
         <Hero
           featuredProperty={properties[0] || null}
           propertyCount={properties.length || 6}
+          onOpenVisitModal={() => setVisitModalOpen(true)}
         />
 
         <div className="gh-wrap">
@@ -302,16 +308,17 @@ export default function GharsetuPublicLandingPage() {
             )}
 
             <div className="pt-4 border-t border-[#D5E2DF] dark:border-[#1F3836] flex items-center gap-3">
-              <a
-                href="#visit"
+              <button
+                type="button"
                 onClick={() => {
                   setSelectedVisitPropertyId(detailModalProperty.id);
                   setDetailModalProperty(null);
+                  setVisitModalOpen(true);
                 }}
                 className="gh-btn gh-btn-cta flex-1"
               >
                 Book a free site visit
-              </a>
+              </button>
               <button
                 type="button"
                 onClick={() => setDetailModalProperty(null)}
@@ -323,6 +330,15 @@ export default function GharsetuPublicLandingPage() {
           </div>
         </div>
       )}
+
+      {/* Site Visit Booking Card Modal */}
+      <VisitModal
+        open={visitModalOpen}
+        onClose={() => setVisitModalOpen(false)}
+        properties={properties}
+        selectedPropertyId={selectedVisitPropertyId}
+        onSelectPropertyId={(id) => setSelectedVisitPropertyId(id)}
+      />
     </>
   );
 }
