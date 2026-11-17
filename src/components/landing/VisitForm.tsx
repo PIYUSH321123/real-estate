@@ -98,8 +98,13 @@ export function VisitForm({
       } else {
         setErrorMsg(res.message);
       }
-    } catch {
-      setErrorMsg("An unexpected error occurred. Please contact us via phone or WhatsApp.");
+    } catch (err) {
+      console.error("Visit form submission error:", err);
+      setErrorMsg(
+        err instanceof Error
+          ? err.message
+          : "An unexpected error occurred. Please contact us via phone or WhatsApp."
+      );
     } finally {
       setIsSubmitting(false);
     }

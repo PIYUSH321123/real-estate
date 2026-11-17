@@ -226,7 +226,7 @@ export async function submitWebsiteLead(
     return processWebsiteLead(data);
   }
 
-  // Browser execution: POST to /api/leads first so server memory/DB registers it too
+  // Browser execution: POST to /api/leads first so server registers it too
   try {
     const res = await fetch("/api/leads", {
       method: "POST",
@@ -234,13 +234,21 @@ export async function submitWebsiteLead(
       body: JSON.stringify(data),
     });
 
-    const json = await res.json();
+    let json: Record<string, unknown> = {};
+    try {
+      json = await res.json();
+    } catch {
+      json = {};
+    }
+
     if (!res.ok) {
-      // Only treat 4xx as user validation errors; fall back locally on 5xx server glitches
+      // Surface 4xx validation errors to the user; fall back locally on 5xx server glitches
       if (res.status >= 400 && res.status < 500) {
         return {
           success: false,
-          message: json.error || "Please check your details and try again.",
+          message:
+            (typeof json.error === "string" && json.error) ||
+            "Please check your details and try again.",
         };
       }
       console.warn("Server returned 5xx on /api/leads, registering locally:", json);
@@ -248,19 +256,34 @@ export async function submitWebsiteLead(
     }
 
     // Mirror exact server-created records into browser store + localStorage
-    if (json.lead) {
-      gharsetuStore.addLead(json.lead);
-    }
-    if (json.siteVisit) {
-      gharsetuStore.addSiteVisit(json.siteVisit);
-    }
-    if (json.followUp) {
-      gharsetuStore.addFollowUp(json.followUp);
+    try {
+      if (json.lead && typeof json.lead === "object") {
+        gharsetuStore.addLead(json.lead as Lead);
+      }
+      if (json.siteVisit && typeof json.siteVisit === "object") {
+        gharsetuStore.addSiteVisit(json.siteVisit as SiteVisit);
+      }
+      if (json.followUp && typeof json.followUp === "object") {
+        gharsetuStore.addFollowUp(json.followUp as FollowUpTask);
+      }
+    } catch (mirrorErr) {
+      console.warn("Local mirror warning (server already saved):", mirrorErr);
     }
 
-    return json as LeadSubmissionResult;
+    return json as unknown as LeadSubmissionResult;
   } catch (err) {
     console.warn("API submission unreachable, saving locally to CRM store:", err);
-    return processWebsiteLead(data);
+    try {
+      return processWebsiteLead(data);
+    } catch (localErr) {
+      console.error("Local lead registration failed:", localErr);
+      return {
+        success: false,
+        message:
+          localErr instanceof Error
+            ? `Booking error: ${localErr.message}`
+            : "Could not save your booking. Please try again or call us directly.",
+      };
+    }
   }
 }

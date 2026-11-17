@@ -11,52 +11,128 @@ const STORAGE_KEY = "gharsetu_crm_store_v1";
 
 type Listener = () => void;
 
-function mergeUniqueById<T extends { id: string }>(incoming: T[], base: T[]): T[] {
+interface GharsetuData {
+  leads: Lead[];
+  properties: Property[];
+  followUps: FollowUpTask[];
+  siteVisits: SiteVisit[];
+  deals: Deal[];
+  listeners: Set<Listener>;
+  storageListenerAttached?: boolean;
+}
+
+function mergeUniqueById<T extends { id: string }>(incoming: unknown[], base: T[]): T[] {
   const map = new Map<string, T>();
-  for (const item of incoming) {
-    map.set(item.id, item);
+  if (Array.isArray(incoming)) {
+    for (const raw of incoming) {
+      const item = raw as T | null | undefined;
+      if (item && typeof item === "object" && typeof item.id === "string" && item.id) {
+        map.set(item.id, item);
+      }
+    }
   }
-  for (const item of base) {
-    if (!map.has(item.id)) {
-      map.set(item.id, item);
+  if (Array.isArray(base)) {
+    for (const item of base) {
+      if (item && typeof item === "object" && typeof item.id === "string" && !map.has(item.id)) {
+        map.set(item.id, item);
+      }
     }
   }
   return Array.from(map.values());
 }
 
-// Browser & Node safe persistent reactive store for Gharsetu Real Estate CRM
-class GharsetuStore {
-  leads: Lead[] = [...INITIAL_LEADS];
-  properties: Property[] = [...INITIAL_PROPERTIES];
-  followUps: FollowUpTask[] = [...INITIAL_FOLLOW_UPS];
-  siteVisits: SiteVisit[] = [...INITIAL_SITE_VISITS];
-  deals: Deal[] = [...INITIAL_DEALS];
+declare const globalThis: {
+  __gharsetuData?: GharsetuData;
+} & typeof global;
 
-  private listeners = new Set<Listener>();
-  private hydrated = false;
+function getSharedData(): GharsetuData {
+  if (!globalThis.__gharsetuData) {
+    globalThis.__gharsetuData = {
+      leads: [...INITIAL_LEADS],
+      properties: [...INITIAL_PROPERTIES],
+      followUps: [...INITIAL_FOLLOW_UPS],
+      siteVisits: [...INITIAL_SITE_VISITS],
+      deals: [...INITIAL_DEALS],
+      listeners: new Set<Listener>(),
+    };
+  }
+  // Defensive guards in case of partial hydration
+  const d = globalThis.__gharsetuData;
+  if (!Array.isArray(d.leads)) d.leads = [...INITIAL_LEADS];
+  if (!Array.isArray(d.properties)) d.properties = [...INITIAL_PROPERTIES];
+  if (!Array.isArray(d.followUps)) d.followUps = [...INITIAL_FOLLOW_UPS];
+  if (!Array.isArray(d.siteVisits)) d.siteVisits = [...INITIAL_SITE_VISITS];
+  if (!Array.isArray(d.deals)) d.deals = [...INITIAL_DEALS];
+  if (!(d.listeners instanceof Set)) d.listeners = new Set<Listener>();
+  return d;
+}
+
+// Browser & Node safe persistent reactive store backed by plain globalThis.__gharsetuData
+// Methods always come from the freshly loaded module so HMR never leaves stale prototypes.
+class GharsetuStore {
+  private get data(): GharsetuData {
+    return getSharedData();
+  }
+
+  get leads(): Lead[] {
+    return this.data.leads;
+  }
+  set leads(val: Lead[]) {
+    this.data.leads = val;
+  }
+
+  get properties(): Property[] {
+    return this.data.properties;
+  }
+  set properties(val: Property[]) {
+    this.data.properties = val;
+  }
+
+  get followUps(): FollowUpTask[] {
+    return this.data.followUps;
+  }
+  set followUps(val: FollowUpTask[]) {
+    this.data.followUps = val;
+  }
+
+  get siteVisits(): SiteVisit[] {
+    return this.data.siteVisits;
+  }
+  set siteVisits(val: SiteVisit[]) {
+    this.data.siteVisits = val;
+  }
+
+  get deals(): Deal[] {
+    return this.data.deals;
+  }
+  set deals(val: Deal[]) {
+    this.data.deals = val;
+  }
 
   constructor() {
     if (typeof window !== "undefined") {
       this.hydrateFromStorage();
-      window.addEventListener("storage", (e) => {
-        if (e.key === STORAGE_KEY) {
-          this.hydrated = false;
-          this.hydrateFromStorage();
-          this.emit();
-        }
-      });
+      if (!this.data.storageListenerAttached) {
+        this.data.storageListenerAttached = true;
+        window.addEventListener("storage", (e) => {
+          if (e.key === STORAGE_KEY) {
+            this.hydrateFromStorage();
+            this.emit();
+          }
+        });
+      }
     }
   }
 
   subscribe(listener: Listener): () => void {
-    this.listeners.add(listener);
+    this.data.listeners.add(listener);
     return () => {
-      this.listeners.delete(listener);
+      this.data.listeners.delete(listener);
     };
   }
 
   private emit() {
-    this.listeners.forEach((fn) => {
+    this.data.listeners.forEach((fn) => {
       try {
         fn();
       } catch (err) {
@@ -69,11 +145,10 @@ class GharsetuStore {
     if (typeof window === "undefined") return;
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (!raw) {
-        this.hydrated = true;
-        return;
-      }
+      if (!raw) return;
       const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object") return;
+
       if (Array.isArray(parsed.leads)) {
         this.leads = mergeUniqueById(parsed.leads, INITIAL_LEADS);
       }
@@ -89,7 +164,6 @@ class GharsetuStore {
       if (Array.isArray(parsed.deals)) {
         this.deals = mergeUniqueById(parsed.deals, INITIAL_DEALS);
       }
-      this.hydrated = true;
     } catch (err) {
       console.warn("Failed to hydrate Gharsetu store from localStorage:", err);
     }
@@ -112,29 +186,25 @@ class GharsetuStore {
     }
   }
 
-  /**
-   * Syncs records from server API (/api/leads) into local store so bookings
-   * submitted from any tab, device, or SSR boundary immediately appear.
-   */
   async syncFromServer(): Promise<void> {
     if (typeof window === "undefined") return;
     this.hydrateFromStorage();
     try {
       const res = await fetch("/api/leads", { cache: "no-store" });
       if (!res.ok) return;
-      const data = await res.json();
+      const payload = await res.json();
       let changed = false;
 
-      if (Array.isArray(data.leads)) {
-        this.leads = mergeUniqueById(data.leads, this.leads);
+      if (Array.isArray(payload.leads)) {
+        this.leads = mergeUniqueById(payload.leads, this.leads);
         changed = true;
       }
-      if (Array.isArray(data.siteVisits)) {
-        this.siteVisits = mergeUniqueById(data.siteVisits, this.siteVisits);
+      if (Array.isArray(payload.siteVisits)) {
+        this.siteVisits = mergeUniqueById(payload.siteVisits, this.siteVisits);
         changed = true;
       }
-      if (Array.isArray(data.followUps)) {
-        this.followUps = mergeUniqueById(data.followUps, this.followUps);
+      if (Array.isArray(payload.followUps)) {
+        this.followUps = mergeUniqueById(payload.followUps, this.followUps);
         changed = true;
       }
 
@@ -164,7 +234,7 @@ class GharsetuStore {
       heat: lead.heat ?? "Hot",
       tags: lead.tags || ["Website inquiry"],
     };
-    this.leads = [newLead, ...this.leads.filter((l) => l.id !== newLead.id)];
+    this.leads = [newLead, ...this.leads.filter((l) => l && l.id !== newLead.id)];
     this.saveToStorage();
     this.emit();
     return newLead;
@@ -172,7 +242,7 @@ class GharsetuStore {
 
   updateLeadStatus(leadId: string, status: Lead["status"]) {
     this.hydrateFromStorage();
-    const lead = this.leads.find((l) => l.id === leadId);
+    const lead = this.leads.find((l) => l && l.id === leadId);
     if (lead) {
       lead.status = status;
       this.saveToStorage();
@@ -186,7 +256,7 @@ class GharsetuStore {
       ...prop,
       id: prop.id || `prop-${Date.now()}`,
     };
-    this.properties = [newProp, ...this.properties.filter((p) => p.id !== newProp.id)];
+    this.properties = [newProp, ...this.properties.filter((p) => p && p.id !== newProp.id)];
     this.saveToStorage();
     this.emit();
     return newProp;
@@ -198,7 +268,7 @@ class GharsetuStore {
       ...visit,
       id: visit.id || `visit-${Date.now()}`,
     };
-    this.siteVisits = [newVisit, ...this.siteVisits.filter((v) => v.id !== newVisit.id)];
+    this.siteVisits = [newVisit, ...this.siteVisits.filter((v) => v && v.id !== newVisit.id)];
     this.saveToStorage();
     this.emit();
     return newVisit;
@@ -207,7 +277,7 @@ class GharsetuStore {
   updateSiteVisit(visitId: string, updates: Partial<SiteVisit>) {
     this.hydrateFromStorage();
     this.siteVisits = this.siteVisits.map((v) =>
-      v.id === visitId ? { ...v, ...updates } : v
+      v && v.id === visitId ? { ...v, ...updates } : v
     );
     this.saveToStorage();
     this.emit();
@@ -219,7 +289,7 @@ class GharsetuStore {
       ...task,
       id: task.id || `task-${Date.now()}`,
     };
-    this.followUps = [newTask, ...this.followUps.filter((t) => t.id !== newTask.id)];
+    this.followUps = [newTask, ...this.followUps.filter((t) => t && t.id !== newTask.id)];
     this.saveToStorage();
     this.emit();
     return newTask;
@@ -237,61 +307,11 @@ class GharsetuStore {
       ...deal,
       id: deal.id || `deal-${Date.now()}`,
     };
-    this.deals = [newDeal, ...this.deals.filter((d) => d.id !== newDeal.id)];
+    this.deals = [newDeal, ...this.deals.filter((d) => d && d.id !== newDeal.id)];
     this.saveToStorage();
     this.emit();
     return newDeal;
   }
 }
 
-const STORE_VERSION = 2;
-
-declare const globalThis: {
-  gharsetuStore?: GharsetuStore & { __version?: number };
-} & typeof global;
-
-function initStore(): GharsetuStore {
-  const existing = globalThis.gharsetuStore;
-  const isCurrent =
-    existing &&
-    existing.__version === STORE_VERSION &&
-    typeof existing.addFollowUp === "function" &&
-    typeof existing.hydrateFromStorage === "function" &&
-    typeof existing.subscribe === "function" &&
-    typeof existing.syncFromServer === "function" &&
-    typeof existing.updateSiteVisit === "function" &&
-    typeof existing.updateFollowUps === "function";
-
-  if (isCurrent) {
-    return existing;
-  }
-
-  const fresh = new GharsetuStore() as GharsetuStore & { __version?: number };
-  fresh.__version = STORE_VERSION;
-
-  // Migrate any in-memory data from a pre-HMR store instance
-  if (existing) {
-    if (Array.isArray(existing.leads)) {
-      fresh.leads = mergeUniqueById(existing.leads, fresh.leads);
-    }
-    if (Array.isArray(existing.siteVisits)) {
-      fresh.siteVisits = mergeUniqueById(existing.siteVisits, fresh.siteVisits);
-    }
-    if (Array.isArray(existing.followUps)) {
-      fresh.followUps = mergeUniqueById(existing.followUps, fresh.followUps);
-    }
-    if (Array.isArray(existing.properties)) {
-      fresh.properties = mergeUniqueById(existing.properties, fresh.properties);
-    }
-    if (Array.isArray(existing.deals)) {
-      fresh.deals = mergeUniqueById(existing.deals, fresh.deals);
-    }
-  }
-
-  if (process.env.NODE_ENV !== "production") {
-    globalThis.gharsetuStore = fresh;
-  }
-  return fresh;
-}
-
-export const gharsetuStore = initStore();
+export const gharsetuStore = new GharsetuStore();

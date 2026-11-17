@@ -125,8 +125,13 @@ export function VisitModal({
       } else {
         setErrorMsg(res.message);
       }
-    } catch {
-      setErrorMsg("An unexpected error occurred. Please contact us via phone or WhatsApp.");
+    } catch (err) {
+      console.error("Site visit booking error:", err);
+      setErrorMsg(
+        err instanceof Error
+          ? err.message
+          : "An unexpected error occurred. Please contact us via phone or WhatsApp."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -162,8 +167,11 @@ export function VisitModal({
       } else {
         setErrorMsg(res.message);
       }
-    } catch {
-      setErrorMsg("An error occurred. Please call us directly.");
+    } catch (err) {
+      console.error("Callback request error:", err);
+      setErrorMsg(
+        err instanceof Error ? err.message : "An error occurred. Please call us directly."
+      );
     } finally {
       setIsSubmitting(false);
     }
