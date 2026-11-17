@@ -1,0 +1,502 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Gharsetu Realty Home</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400..700&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: dusk-over-Pune hero with an illustrated skyline, a search card overlapping its edge,
+   then filterable listings, areas, a real 3-step process, review slots, FAQ and a visit form. */
+:root{
+  --bg:#F2F7F6; --surface:#FFFFFF; --ink:#0D1F1E; --muted:#4A605E; --line:#D5E2DF;
+  --brand:#0B6A62; --on-brand:#FFFFFF; --chip:#E1EFEC; --chip-ink:#0A4B45;
+  --cta:#F29A2E; --on-cta:#1F1300;
+  --ok-bg:#DDF3E6; --ok-ink:#0F5C34; --warn-bg:#FCEBCB; --warn-ink:#7A4700; --info-bg:#DCEEF6; --info-ink:#0B4C66;
+  --band:#073B38; --band-ink:#F1FAF8; --band-muted:#A9CFCA;
+  --hero-top:#06292A; --hero-mid:#0C5A55; --hero-low:#E9A04B; --hero-ink:#FFFFFF; --hero-muted:#CBE6E2;
+  --shadow:0 1px 2px rgba(7,40,38,.06),0 8px 24px rgba(7,40,38,.08);
+  --f-display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --f-body:'Figtree','Segoe UI',system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0A1514; --surface:#102120; --ink:#E7F2F0; --muted:#9DB6B3; --line:#1F3836;
+  --brand:#3CC4B4; --on-brand:#03201C; --chip:#143533; --chip-ink:#A8E6DD;
+  --ok-bg:#12382A; --ok-ink:#8FE0B4; --warn-bg:#3F2E10; --warn-ink:#F4CC85; --info-bg:#11323F; --info-ink:#9ED6EE;
+  --band:#0D2A28; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1514; --surface:#102120; --ink:#E7F2F0; --muted:#9DB6B3; --line:#1F3836;
+  --brand:#3CC4B4; --on-brand:#03201C; --chip:#143533; --chip-ink:#A8E6DD;
+  --ok-bg:#12382A; --ok-ink:#8FE0B4; --warn-bg:#3F2E10; --warn-ink:#F4CC85; --info-bg:#11323F; --info-ink:#9ED6EE;
+  --band:#0D2A28; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--surface)}
+h1,h2,h3{font-family:var(--f-display);line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.02em}
+p{margin:0}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--cta);outline-offset:2px}
+.wrap{max-width:1240px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:12px 18px;font-weight:700;font-size:15px;cursor:pointer;text-decoration:none;white-space:nowrap;transition:transform .15s,box-shadow .15s,background .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn-cta{background:var(--cta);color:var(--on-cta);box-shadow:0 4px 14px rgba(242,154,46,.35)}
+.btn-brand{background:var(--brand);color:var(--on-brand)}
+.btn-wa{background:#1FA855;color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--brand)}
+.btn svg{width:18px;height:18px;flex:none}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;height:68px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.logo-mark{width:38px;height:38px;border-radius:10px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;flex:none}
+.logo-mark svg{width:22px;height:22px}
+.logo b{font-family:var(--f-display);font-size:19px;letter-spacing:-.01em;display:block;line-height:1.1}
+.logo small{display:block;font-size:12px;color:var(--muted)}
+.nav{display:flex;gap:6px;margin-left:auto}
+.nav a{padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;color:var(--muted)}
+.nav a:hover{color:var(--ink);background:var(--chip)}
+.top-actions{display:flex;align-items:center;gap:10px}
+.phone{font-weight:700;font-size:15px;text-decoration:none;white-space:nowrap}
+.crm-link{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:8px 12px;border-radius:8px;white-space:nowrap}
+
+/* hero */
+.hero{position:relative;overflow:hidden;color:var(--hero-ink);background:linear-gradient(180deg,var(--hero-top) 0%,var(--hero-mid) 62%,var(--hero-low) 100%);padding-block:72px 170px}
+.hero .sun{position:absolute;right:12%;bottom:70px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#FFE0A8 0%,rgba(255,200,120,.55) 38%,rgba(255,190,100,0) 70%)}
+.skyline{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:300px}
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:40px;align-items:center}
+.rera-pill{display:inline-flex;flex-wrap:wrap;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);border-radius:99px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--hero-ink)}
+.rera-pill i{width:6px;height:6px;border-radius:50%;background:#5EE0B8;display:inline-block}
+.hero h1{font-size:clamp(38px,5.6vw,72px);font-weight:800;margin-top:20px;max-width:14ch}
+.hero h1 em{font-style:normal;color:#FFC477}
+.hero .lede{margin-top:20px;max-width:52ch;font-size:18px;color:var(--hero-muted)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.hero .btn-ghost{color:#fff;border-color:rgba(255,255,255,.4)}
+.mini{background:var(--surface);color:var(--ink);border-radius:16px;padding:12px;box-shadow:0 20px 50px rgba(0,0,0,.35);max-width:340px;justify-self:end;width:100%}
+.mini .art{border-radius:10px;overflow:hidden;aspect-ratio:16/10}
+.mini .art svg{display:block;width:100%;height:100%}
+.mini .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:12px 4px 4px}
+.mini .row b{font-family:var(--f-display);font-size:20px}
+.mini small{color:var(--muted);padding:0 4px 4px;display:block}
+.mini .tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);padding:6px 4px 0;display:block}
+
+/* search */
+.search{position:relative;z-index:2;margin-top:-72px;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:14px;align-items:end}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.field input,.field select{height:48px;border:1.5px solid var(--line);border-radius:10px;padding:0 12px;background:var(--bg);width:100%}
+.field input:focus,.field select:focus{border-color:var(--brand);outline:none}
+.search .btn{height:48px}
+
+/* trust */
+.trust{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:22px}
+.trust div{display:flex;gap:12px;align-items:center;padding:10px 4px}
+.trust .ic{width:44px;height:44px;border-radius:12px;background:var(--chip);color:var(--brand);display:grid;place-items:center;flex:none}
+.trust .ic svg{width:22px;height:22px}
+.trust b{display:block;font-size:15px}
+.trust span{font-size:13px;color:var(--muted)}
+
+section.block{padding-block:72px 0}
+.head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+.head h2{font-size:clamp(28px,3.6vw,42px);font-weight:800;margin-top:8px}
+.head p{color:var(--muted);max-width:46ch}
+
+/* chips */
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:99px;padding:8px 15px;font-weight:600;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.count{font-size:14px;color:var(--muted);margin:16px 0}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.card .art{position:relative;aspect-ratio:16/10}
+.card .art svg{display:block;width:100%;height:100%}
+.badge{position:absolute;left:12px;top:12px;font-size:12px;font-weight:700;padding:5px 10px;border-radius:99px}
+.badge.ready{background:var(--ok-bg);color:var(--ok-ink)}
+.badge.uc{background:var(--warn-bg);color:var(--warn-ink)}
+.badge.av{background:var(--info-bg);color:var(--info-ink)}
+.save{position:absolute;right:12px;top:12px;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#0D1F1E;display:grid;place-items:center;cursor:pointer}
+.save svg{width:18px;height:18px}
+.save[aria-pressed="true"]{color:#D6334B}
+.save[aria-pressed="true"] svg{fill:currentColor}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.price-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.price{font-family:var(--f-display);font-size:28px;font-weight:800;color:var(--brand);letter-spacing:-.02em}
+.psf{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.card h3{font-size:20px}
+.loc{display:flex;gap:6px;align-items:center;font-size:14px;color:var(--muted)}
+.loc svg{width:16px;height:16px;flex:none}
+.specs{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;font-weight:600}
+.specs span{display:inline-flex;gap:6px;align-items:center}
+.specs svg{width:17px;height:17px;color:var(--brand)}
+.blurb{font-size:14px;color:var(--muted)}
+.rera{font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px;margin-top:auto}
+.rera svg{width:15px;height:15px;color:var(--brand)}
+.card .acts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card .acts .btn{padding:11px 10px;font-size:14px}
+.empty{grid-column:1/-1;text-align:center;padding:48px 16px;border:1.5px dashed var(--line);border-radius:16px;color:var(--muted)}
+
+/* areas */
+.areas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.area{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;cursor:pointer}
+.area:hover{border-color:var(--brand)}
+.area b{font-family:var(--f-display);font-size:20px;display:block}
+.area span{font-size:13px;color:var(--muted)}
+.area em{font-style:normal;font-size:13px;font-weight:700;color:var(--chip-ink);background:var(--chip);padding:5px 10px;border-radius:99px;white-space:nowrap}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;counter-reset:s}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px}
+.step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--brand);color:var(--on-brand);font-weight:800;margin-bottom:14px}
+.step h3{font-size:20px;margin-bottom:8px}
+.step p{color:var(--muted);font-size:15px}
+
+/* reviews */
+.reviews{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.slot{border:1.5px dashed var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:12px;color:var(--muted);font-size:14px;min-height:190px}
+.slot .av{width:48px;height:48px;border-radius:50%;background:var(--chip)}
+.slot b{color:var(--ink);font-size:15px}
+
+/* faq */
+.faq{display:grid;gap:10px;max-width:860px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 18px}
+summary{cursor:pointer;font-weight:700;padding:16px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:22px;line-height:1;color:var(--brand)}
+details[open] summary::after{content:"–"}
+details p{padding-bottom:16px;color:var(--muted)}
+
+/* visit band */
+.band{margin-top:80px;background:var(--band);color:var(--band-ink);padding-block:64px}
+.band-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:start}
+.band h2{font-size:clamp(28px,3.6vw,42px);font-weight:800}
+.band p.lede{margin-top:14px;color:var(--band-muted);max-width:44ch}
+.perks{list-style:none;padding:0;margin:24px 0 0;display:grid;gap:12px}
+.perks li{display:flex;gap:10px;align-items:center;font-weight:600}
+.perks svg{width:20px;height:20px;color:#5EE0B8;flex:none}
+.form{background:var(--surface);color:var(--ink);border-radius:18px;padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form .full{grid-column:1/-1}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted)}
+.consent input{margin-top:3px;width:18px;height:18px;accent-color:var(--brand);flex:none}
+.form-acts{display:flex;gap:10px;flex-wrap:wrap}
+.form-acts .btn{flex:1 1 180px}
+.err{color:#C22A3D;font-size:13px;min-height:18px}
+.ok{background:var(--ok-bg);color:var(--ok-ink);border-radius:10px;padding:12px 14px;font-size:14px;font-weight:600}
+.demo{font-size:12px;color:var(--muted)}
+
+footer{padding-block:36px 40px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+footer b{color:var(--ink)}
+.mbar{display:none}
+
+@media (max-width:1020px){
+  .hero-grid{grid-template-columns:1fr}.mini{display:none}
+  .grid,.areas,.steps,.reviews{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .search{grid-template-columns:1fr 1fr}.search .btn{grid-column:1/-1}
+  .trust{grid-template-columns:1fr 1fr}
+  .band-grid{grid-template-columns:1fr}
+  .nav,.phone,.crm-link{display:none}.top-actions{margin-left:auto}
+}
+@media (max-width:640px){
+  .grid,.areas,.steps,.reviews{grid-template-columns:1fr}
+  .search{grid-template-columns:1fr}
+  .form{grid-template-columns:1fr}
+  .hero{padding-block:48px 150px}.hero .sun{width:180px;height:180px;right:-30px}
+  .mbar{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:55;background:var(--surface);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+  footer{padding-bottom:90px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top">
+      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V8l8-5 8 5v13"/><path d="M9 21v-6h6v6"/><path d="M9 11h.01M15 11h.01"/></svg></span>
+      <span><b>Gharsetu Realty</b><small>Pune real estate advisory</small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#top">Home</a><a href="#homes">Properties</a><a href="#areas">Areas</a><a href="#faq">About</a><a href="#visit">Contact</a>
+    </nav>
+    <div class="top-actions">
+      <a class="phone" href="tel:+919820144521">+91 98201 44521</a>
+      <a class="btn btn-wa" href="https://wa.me/919820144521" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-13.4 7.8L3 21l1.3-4.4A9 9 0 1 1 21 12Z"/></svg>WhatsApp</a>
+      <a class="crm-link" href="#">Agent CRM portal</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="sun" aria-hidden="true"></div>
+  <svg class="skyline" id="skyline" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="rera-pill"><i></i>MahaRERA Reg. A52100029810 · 0% buyer brokerage</span>
+      <h1>Pune homes you can walk through this weekend.</h1>
+      <p class="lede">Handpicked 2, 3 and 4 BHK homes in Baner, Wakad, Kharadi and Hinjewadi. Developer pricing, registered projects and a free cab to every site visit.</p>
+      <div class="hero-cta">
+        <a class="btn btn-cta" href="#visit">Book a free site visit</a>
+        <a class="btn btn-ghost" href="#homes">Browse 6 homes</a>
+      </div>
+    </div>
+    <aside class="mini" id="mini" aria-label="Featured home"></aside>
+  </div>
+</section>
+
+<div class="wrap">
+  <form class="search" id="search" aria-label="Search homes">
+    <div class="field"><label for="s-area">Area</label><select id="s-area"></select></div>
+    <div class="field"><label for="s-type">Home type</label>
+      <select id="s-type"><option value="any">Any type</option><option>1 BHK</option><option>2 BHK</option><option>3 BHK</option><option>4 BHK</option><option>Plot</option><option>Commercial</option></select></div>
+    <div class="field"><label for="s-budget">Budget</label>
+      <select id="s-budget"><option value="any">Any budget</option><option value="lt50">Under ₹50 L</option><option value="50-100">₹50 L to ₹1 Cr</option><option value="100-200">₹1 Cr to ₹2 Cr</option><option value="gt200">Above ₹2 Cr</option></select></div>
+    <button class="btn btn-brand" type="submit">Search homes</button>
+  </form>
+
+  <div class="trust">
+    <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span><p><b>MahaRERA registered</b><span>Reg. A52100029810</span></p></div>
+    <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/></svg></span><p><b>0% buyer brokerage</b><span>Direct developer pricing</span></p></div>
+    <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.5 3.2-5.5 6.5-5.5s5.9 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg></span><p><b>1,200+ Pune families</b><span>Guided to their homes</span></p></div>
+    <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15v-3l2-5h14l2 5v3"/><path d="M3 15h18v3H3z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="16.5" cy="18" r="1.5"/></svg></span><p><b>Free AC cab visits</b><span>Doorstep pickup and drop</span></p></div>
+  </div>
+
+  <section class="block" id="homes">
+    <div class="head">
+      <div><span class="eyebrow">Featured homes</span><h2>Inspected, price-locked, ready to visit</h2></div>
+      <div class="chips" id="chips" role="group" aria-label="Filter by status"></div>
+    </div>
+    <p class="count" id="count" aria-live="polite"></p>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="block" id="areas">
+    <div class="head"><div><span class="eyebrow">Where we work</span><h2>Pick your side of Pune</h2></div><p>Tap an area to see only the homes there.</p></div>
+    <div class="areas" id="areaGrid"></div>
+  </section>
+
+  <section class="block">
+    <div class="head"><div><span class="eyebrow">How it works</span><h2>From first message to keys, in three steps</h2></div></div>
+    <div class="steps">
+      <div class="step"><h3>Tell us what you need</h3><p>Share your budget, area and BHK. We reply on WhatsApp with floor plans and the current price sheet.</p></div>
+      <div class="step"><h3>Visit with a free cab</h3><p>We pick a slot that suits you, send a cab to your door and walk you through the project and the sample flat.</p></div>
+      <div class="step"><h3>Book with clear paperwork</h3><p>We help you compare payment plans, check RERA details and connect you with lenders for EMI estimates.</p></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="head"><div><span class="eyebrow">Client reviews</span><h2>What families say</h2></div><p>Design slots. Add real reviews with a name, project and photo.</p></div>
+    <div class="reviews">
+      <div class="slot"><span class="av"></span><b>Client name, project</b>Paste a real quote here, two or three lines about the site visit and the buying process.</div>
+      <div class="slot"><span class="av"></span><b>Client name, project</b>Use the same photo size and quote length for every review so the row stays even.</div>
+      <div class="slot"><span class="av"></span><b>Client name, project</b>A short video review from a happy family works even better than text.</div>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="head"><div><span class="eyebrow">Questions</span><h2>Before you book a visit</h2></div></div>
+    <div class="faq">
+      <details><summary>Do I really pay no brokerage?</summary><p>Developers pay our fee, so the price you see is the developer's price. Ask us for the terms in writing before you book.</p></details>
+      <details><summary>How do I check that a project is RERA registered?</summary><p>Every home on this page shows its MahaRERA number. You can verify it yourself on <a href="https://maharera.maharashtra.gov.in" target="_blank" rel="noopener">the MahaRERA portal</a>.</p></details>
+      <details><summary>What happens after I book a site visit?</summary><p>We confirm the slot on WhatsApp, a cab collects you from home, and an advisor shows you the project. There is no obligation to buy.</p></details>
+      <details><summary>Can you help with a home loan?</summary><p>We share EMI estimates and introduce you to lenders. You choose the bank and the loan terms.</p></details>
+    </div>
+  </section>
+</div>
+
+<section class="band" id="visit">
+  <div class="wrap band-grid">
+    <div>
+      <span class="eyebrow" style="color:#5EE0B8">Free site visit</span>
+      <h2 style="margin-top:8px">See it in person before you decide.</h2>
+      <p class="lede">Tell us when you are free. We confirm on WhatsApp within the hour during working hours.</p>
+      <ul class="perks">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>Free AC cab from your doorstep</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>Floor plans and price sheet before you go</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>No pressure and no brokerage</li>
+      </ul>
+    </div>
+    <form class="form" id="visitForm" novalidate>
+      <div class="field"><label for="v-name">Full name</label><input id="v-name" autocomplete="name" placeholder="Rahul Sharma" required></div>
+      <div class="field"><label for="v-phone">WhatsApp number</label><input id="v-phone" inputmode="numeric" autocomplete="tel-national" placeholder="98225 78324" required></div>
+      <div class="field"><label for="v-project">Home you want to see</label><select id="v-project"></select></div>
+      <div class="field"><label for="v-day">Preferred day</label><select id="v-day"><option>This Saturday</option><option>This Sunday</option><option>A weekday evening</option></select></div>
+      <label class="consent full"><input type="checkbox" id="v-consent" checked>I agree to receive floor plans, price sheets and visit schedules on WhatsApp or phone.</label>
+      <div class="err full" id="v-err" role="alert"></div>
+      <div class="form-acts full">
+        <button class="btn btn-cta" type="submit">Book my free visit</button>
+        <button class="btn btn-ghost" type="button" id="callback">Request a call back</button>
+      </div>
+      <div class="full" id="v-ok" hidden></div>
+      <p class="demo full">Demo form. On the live site this creates a lead in the CRM with source "Website" and the selected home.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b>Gharsetu Realty</b><br>© 2026 Gharsetu Real Estate CRM &amp; Advisory. All rights reserved.<br>Office address, email and privacy policy go here.</div>
+    <div>MahaRERA Registration: <b>A52100029810</b><br>Phone: +91 98201 44521</div>
+  </div>
+</footer>
+
+<div class="mbar">
+  <a class="btn btn-ghost" href="tel:+919820144521">Call</a>
+  <a class="btn btn-wa" href="https://wa.me/919820144521" target="_blank" rel="noopener">WhatsApp</a>
+</div>
+
+<script>
+/* ---- Sample listings. Replace with data from your CRM. RERA ids below are placeholders. ---- */
+var L=[
+ {id:'skyline',name:'Skyline Heights',status:'Ready',kind:'apartment',beds:'3 BHK',bedsLabel:'3 BHK',area:'Baner',sqft:1280,lakh:145,price:'₹1.45 Cr',art:'tower',hue:200,rera:'P52100000001',blurb:'Premium high-rise apartment near Vibgyor School, modular kitchen, 2 covered car parkings.'},
+ {id:'green',name:'Green Acres',status:'Under construction',kind:'apartment',beds:'2 BHK',bedsLabel:'2 BHK',area:'Wakad',sqft:950,lakh:82,price:'₹82 L',art:'tower',hue:150,rera:'P52100000002',blurb:'Smart lifestyle homes in the heart of Wakad, minutes from Hinjewadi IT park phase 1.'},
+ {id:'orchid',name:'Orchid Villas',status:'Ready',kind:'villa',beds:'4 BHK',bedsLabel:'4 BHK villa',area:'Kharadi',sqft:2400,lakh:320,price:'₹3.2 Cr',art:'villa',hue:30,rera:'P52100000003',blurb:'Exclusive gated villa community with private garden and clubhouse amenities.'},
+ {id:'lake',name:'Lake View Plots',status:'Available',kind:'plot',beds:'Plot',bedsLabel:'Plot',area:'Lonavala',sqft:1500,lakh:60,price:'₹60 L',art:'plot',hue:170,rera:'P52100000004',blurb:'NA sanctioned residential plots overlooking Pavna basin, ideal for a second home.'},
+ {id:'metro',name:'Metro Square',status:'Ready',kind:'commercial',beds:'Shop',bedsLabel:'Commercial shop',area:'Hinjewadi',sqft:420,lakh:95,price:'₹95 L',art:'shop',hue:260,rera:'P52100000005',blurb:'High footfall retail storefront on the main IT park arterial road.'},
+ {id:'river',name:'Riverside 1BHK',status:'Ready',kind:'apartment',beds:'1 BHK',bedsLabel:'1 BHK',area:'Hadapsar',sqft:560,lakh:48,price:'₹48 L',art:'tower',hue:215,rera:'P52100000006',blurb:'Affordable compact living close to Magarpatta City and SP Infocity.'}
+];
+var AREAS=['Baner','Wakad','Kharadi','Hinjewadi','Hadapsar','Lonavala'];
+var CHIPS=[['all','All homes'],['ready','Ready to move'],['uc','Under construction'],['plot','Plots'],['commercial','Commercial']];
+var state={chip:'all',area:'any',type:'any',budget:'any'};
+var saved={};
+
+var IC={
+ bed:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="1.5"/></svg>',
+ area:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
+ pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11.5a7 7 0 1 0-14 0C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+ heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.6-9 9-9 9Z"/></svg>',
+ shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3Z"/><path d="m9 12 2 2 4-4"/></svg>'
+};
+
+/* ---- Illustrated skyline (decorative, replace with a real photo if you prefer) ---- */
+(function(){
+  var s=7;function r(){s=(s*9301+49297)%233280;return s/233280}
+  var out='',x=-20;
+  function layer(fill,minH,maxH,minW,maxW,lit){
+    var x=-20,g='';
+    while(x<1460){
+      var w=minW+Math.floor(r()*(maxW-minW)),h=minH+Math.floor(r()*(maxH-minH)),y=300-h;
+      g+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+fill+'"/>';
+      if(lit){for(var yy=y+14;yy<296;yy+=16){for(var xx=x+8;xx<x+w-8;xx+=12){if(r()>.72)g+='<rect x="'+xx+'" y="'+yy+'" width="4" height="6" rx="1" fill="#FFC477" opacity="'+(.55+r()*.4).toFixed(2)+'"/>'}}}
+      x+=w+(r()>.6?6:0);
+    }
+    return g;
+  }
+  out+=layer('#0A4A47',60,170,34,70,false);
+  out+=layer('#062726',30,120,40,90,true);
+  document.getElementById('skyline').innerHTML=out;
+})();
+
+/* ---- Card art (placeholder illustrations; swap for real photos) ---- */
+function art(l,id){
+  var h=l.hue,g='<defs><linearGradient id="g'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="hsl('+h+',55%,78%)"/><stop offset="1" stop-color="hsl('+h+',60%,92%)"/></linearGradient></defs><rect width="400" height="250" fill="url(#g'+id+')"/>';
+  var d='hsl('+h+',45%,26%)',m='hsl('+h+',40%,38%)',w='hsl(45,95%,75%)',gr='hsl(150,35%,38%)';
+  if(l.art==='tower'){
+    g+='<circle cx="330" cy="60" r="26" fill="hsl(40,95%,80%)"/><rect x="0" y="212" width="400" height="38" fill="'+gr+'"/>';
+    g+='<rect x="70" y="80" width="70" height="140" fill="'+m+'"/><rect x="160" y="40" width="96" height="180" fill="'+d+'"/><rect x="276" y="100" width="64" height="120" fill="'+m+'"/>';
+    for(var i=0;i<6;i++)for(var j=0;j<4;j++){g+='<rect x="'+(172+j*20)+'" y="'+(54+i*26)+'" width="12" height="14" fill="'+w+'"/>'}
+    for(var a=0;a<4;a++)for(var b=0;b<2;b++){g+='<rect x="'+(82+b*28)+'" y="'+(94+a*30)+'" width="14" height="14" fill="'+w+'" opacity=".8"/>'}
+  }else if(l.art==='villa'){
+    g+='<circle cx="60" cy="56" r="24" fill="hsl(40,95%,80%)"/><rect x="0" y="200" width="400" height="50" fill="'+gr+'"/>';
+    g+='<rect x="90" y="120" width="220" height="86" fill="hsl(30,35%,88%)"/><polygon points="76,122 200,56 324,122" fill="'+d+'"/><rect x="186" y="152" width="30" height="54" fill="'+d+'"/>';
+    g+='<rect x="110" y="140" width="48" height="34" fill="'+w+'"/><rect x="242" y="140" width="48" height="34" fill="'+w+'"/><circle cx="48" cy="186" r="22" fill="hsl(140,40%,30%)"/><circle cx="360" cy="190" r="20" fill="hsl(140,40%,30%)"/>';
+  }else if(l.art==='plot'){
+    g+='<circle cx="320" cy="56" r="24" fill="hsl(40,95%,80%)"/><polygon points="0,170 90,100 170,160 250,90 400,180 400,250 0,250" fill="hsl(160,30%,45%)"/><rect x="0" y="190" width="400" height="60" fill="hsl(195,55%,55%)"/>';
+    g+='<polygon points="40,250 170,205 360,205 400,250" fill="hsl(95,35%,52%)"/><path d="M120 250 L190 208 M200 250 L240 208 M280 250 L290 208" stroke="#fff" stroke-width="2" opacity=".8"/>';
+  }else{
+    g+='<rect x="0" y="206" width="400" height="44" fill="hsl(220,10%,40%)"/><rect x="60" y="70" width="280" height="140" fill="'+m+'"/><rect x="60" y="70" width="280" height="30" fill="'+d+'"/>';
+    g+='<rect x="84" y="120" width="90" height="90" fill="'+w+'" opacity=".9"/><rect x="226" y="120" width="90" height="90" fill="'+w+'" opacity=".9"/><rect x="186" y="130" width="28" height="80" fill="'+d+'"/>';
+    g+='<path d="M60 100h280l-12 22H72z" fill="hsl(15,80%,55%)"/>';
+  }
+  return '<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustration of '+l.name+'">'+g+'</svg>';
+}
+
+function matches(l){
+  var c=state.chip;
+  if(c==='ready'&&l.status!=='Ready')return false;
+  if(c==='uc'&&l.status!=='Under construction')return false;
+  if(c==='plot'&&l.kind!=='plot')return false;
+  if(c==='commercial'&&l.kind!=='commercial')return false;
+  if(state.area!=='any'&&l.area!==state.area)return false;
+  var t=state.type;
+  if(t!=='any'){if(t==='Commercial'){if(l.kind!=='commercial')return false}else if(l.beds!==t)return false}
+  var b=state.budget,v=l.lakh;
+  if(b==='lt50'&&!(v<50))return false;
+  if(b==='50-100'&&!(v>=50&&v<=100))return false;
+  if(b==='100-200'&&!(v>100&&v<=200))return false;
+  if(b==='gt200'&&!(v>200))return false;
+  return true;
+}
+function statusClass(s){return s==='Ready'?'ready':s==='Under construction'?'uc':'av'}
+
+function render(){
+  var list=L.filter(matches),grid=document.getElementById('grid');
+  document.getElementById('count').textContent='Showing '+list.length+' of '+L.length+' homes';
+  if(!list.length){grid.innerHTML='<div class="empty"><p>No homes match these filters.</p><p style="margin-top:12px"><button class="btn btn-brand" id="clear" type="button">Clear filters</button></p></div>';document.getElementById('clear').onclick=function(){state={chip:'all',area:'any',type:'any',budget:'any'};syncControls();render()};return}
+  grid.innerHTML=list.map(function(l,i){
+    var psf=Math.round(l.lakh*100000/l.sqft).toLocaleString('en-IN');
+    return '<article class="card"><div class="art">'+art(l,l.id)+'<span class="badge '+statusClass(l.status)+'">'+l.status+'</span>'
+     +'<button class="save" type="button" data-id="'+l.id+'" aria-pressed="'+(!!saved[l.id])+'" aria-label="Save '+l.name+'">'+IC.heart+'</button></div>'
+     +'<div class="body"><div class="price-row"><span class="price">'+l.price+'</span><span class="psf">₹'+psf+' / sq ft</span></div>'
+     +'<h3>'+l.name+'</h3><div class="loc">'+IC.pin+l.area+', Pune</div>'
+     +'<div class="specs"><span>'+IC.bed+l.bedsLabel+'</span><span>'+IC.area+l.sqft.toLocaleString('en-IN')+' sq ft</span></div>'
+     +'<p class="blurb">'+l.blurb+'</p>'
+     +'<div class="rera">'+IC.shield+'MahaRERA '+l.rera+'</div>'
+     +'<div class="acts"><a class="btn btn-brand" href="#visit" data-visit="'+l.id+'">View details</a><a class="btn btn-ghost" href="#visit" data-visit="'+l.id+'">Book visit</a></div></div></article>';
+  }).join('');
+}
+
+function syncControls(){
+  document.getElementById('s-area').value=state.area;
+  document.getElementById('s-type').value=state.type;
+  document.getElementById('s-budget').value=state.budget;
+  Array.prototype.forEach.call(document.querySelectorAll('#chips .chip'),function(b){b.setAttribute('aria-pressed',String(b.dataset.k===state.chip))});
+}
+
+/* controls */
+(function(){
+  var sa=document.getElementById('s-area');
+  sa.innerHTML='<option value="any">All areas</option>'+AREAS.map(function(a){return '<option>'+a+'</option>'}).join('');
+  document.getElementById('chips').innerHTML=CHIPS.map(function(c){return '<button class="chip" type="button" data-k="'+c[0]+'" aria-pressed="'+(c[0]==='all')+'">'+c[1]+'</button>'}).join('');
+  document.getElementById('chips').addEventListener('click',function(e){var b=e.target.closest('.chip');if(!b)return;state.chip=b.dataset.k;syncControls();render()});
+  document.getElementById('search').addEventListener('submit',function(e){
+    e.preventDefault();state.area=sa.value;state.type=document.getElementById('s-type').value;state.budget=document.getElementById('s-budget').value;state.chip='all';syncControls();render();
+    document.getElementById('homes').scrollIntoView({behavior:'smooth'});
+  });
+  document.getElementById('areaGrid').innerHTML=AREAS.map(function(a){
+    var n=L.filter(function(l){return l.area===a}).length;
+    return '<button class="area" type="button" data-a="'+a+'"><div><b>'+a+'</b><span>Pune</span></div><em>'+n+(n===1?' home':' homes')+'</em></button>';
+  }).join('');
+  document.getElementById('areaGrid').addEventListener('click',function(e){var b=e.target.closest('.area');if(!b)return;state={chip:'all',area:b.dataset.a,type:'any',budget:'any'};syncControls();render();document.getElementById('homes').scrollIntoView({behavior:'smooth'})});
+  document.getElementById('grid').addEventListener('click',function(e){
+    var s=e.target.closest('.save');if(s){var id=s.dataset.id;saved[id]=!saved[id];s.setAttribute('aria-pressed',String(!!saved[id]));return}
+    var v=e.target.closest('[data-visit]');if(v){document.getElementById('v-project').value=v.dataset.visit}
+  });
+  document.getElementById('v-project').innerHTML=L.map(function(l){return '<option value="'+l.id+'">'+l.name+', '+l.area+'</option>'}).join('');
+  /* featured mini card */
+  var f=L[0];
+  document.getElementById('mini').innerHTML='<span class="tag">Featured today</span><div class="row"><b>'+f.name+'</b><b style="color:var(--brand)">'+f.price+'</b></div><small>'+f.bedsLabel+' · '+f.area+' · '+f.sqft.toLocaleString('en-IN')+' sq ft</small><div class="art">'+art(f,'mini')+'</div>';
+  /* visit form */
+  var form=document.getElementById('visitForm'),err=document.getElementById('v-err'),ok=document.getElementById('v-ok');
+  function check(){
+    var n=document.getElementById('v-name').value.trim(),p=document.getElementById('v-phone').value.replace(/\D/g,'');
+    if(p.length===12&&p.indexOf('91')===0)p=p.slice(2);
+    if(n.length<2){err.textContent='Enter your full name.';return null}
+    if(!/^[6-9]\d{9}$/.test(p)){err.textContent='Enter a valid 10-digit mobile number.';return null}
+    if(!document.getElementById('v-consent').checked){err.textContent='Please tick the consent box so we can message you.';return null}
+    err.textContent='';return n;
+  }
+  function done(msg){ok.hidden=false;ok.textContent=msg}
+  form.addEventListener('submit',function(e){e.preventDefault();var n=check();if(n)done('Thanks, '+n.split(' ')[0]+'. Your visit request is noted (demo). We would confirm the slot on WhatsApp.')});
+  document.getElementById('callback').addEventListener('click',function(){var n=check();if(n)done('Thanks, '+n.split(' ')[0]+'. Your call back request is noted (demo).')});
+  syncControls();render();
+})();
+</script>
+
+</body></html>

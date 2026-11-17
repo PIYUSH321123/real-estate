@@ -60,6 +60,7 @@ export type PropertyType = "Apartment" | "Villa" | "Plot" | "Commercial" | "Pent
 
 export interface Property {
   id: string;
+  slug?: string;
   title: string;
   project?: string;
   locality: string;

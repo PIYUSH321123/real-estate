@@ -10,15 +10,18 @@ export interface WebsiteLeadSubmission {
   locality?: string;
   propertyTitle?: string;
   propertyId?: string;
+  preferredDay?: string;
+  inquiryType?: "visit" | "callback" | "general";
   notes?: string;
   utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
+  utmTerm?: string;
   utmContent?: string;
-  honeypot?: string; // Bot trap
+  honeypot?: string; // Hidden spam trap
 }
 
-// In-memory timestamp cache to prevent duplicate rapid-fire submissions
+// In-memory rate limiting map (clean Mobile -> timestamp)
 const recentSubmissions = new Map<string, number>();
 
 export async function submitWebsiteLead(
@@ -26,29 +29,34 @@ export async function submitWebsiteLead(
 ): Promise<{ success: boolean; message: string; leadId?: string }> {
   // 1. Anti-spam honeypot verification
   if (data.honeypot && data.honeypot.trim().length > 0) {
-    // Silently succeed for bots
+    // Silently return success to bot without saving
     return { success: true, message: "Thank you for reaching out." };
   }
 
   // 2. Validate essential fields
   const cleanName = (data.name || "").trim();
-  const cleanMobile = (data.mobile || "").replace(/[^\d+]/g, "").trim();
+  let cleanMobile = (data.mobile || "").replace(/\D/g, "").trim();
+
+  // Handle +91 or 91 country code prefix for Indian numbers
+  if (cleanMobile.length === 12 && cleanMobile.startsWith("91")) {
+    cleanMobile = cleanMobile.slice(2);
+  }
 
   if (!cleanName || cleanName.length < 2) {
-    return { success: false, message: "Please provide a valid full name." };
+    return { success: false, message: "Enter your full name." };
   }
 
-  if (!cleanMobile || cleanMobile.length < 10) {
-    return { success: false, message: "Please enter a valid 10-digit mobile number." };
+  if (!/^[6-9]\d{9}$/.test(cleanMobile)) {
+    return { success: false, message: "Enter a valid 10-digit mobile number." };
   }
 
-  // 3. De-duplicate: 1 minute rate-limit per mobile
+  // 3. De-duplicate rapid submissions (within 60 seconds)
   const now = Date.now();
   const lastSubmitTime = recentSubmissions.get(cleanMobile);
   if (lastSubmitTime && now - lastSubmitTime < 60000) {
     return {
       success: true,
-      message: "We have already received your request. An advisor will message you shortly!",
+      message: `Thanks, ${cleanName.split(" ")[0]}. Your request is noted. We will confirm on WhatsApp.`,
     };
   }
   recentSubmissions.set(cleanMobile, now);
@@ -65,31 +73,44 @@ export async function submitWebsiteLead(
   // 5. Build CRM Lead record
   const locality = data.locality || "Baner, Pune";
   const bhk = data.bhk || "3 BHK";
-  const propertyNote = data.propertyTitle ? `Interested in: ${data.propertyTitle}` : "";
-  const campaignNote = data.utmCampaign ? `Campaign: ${data.utmCampaign}` : "";
-  const tags = ["Website Lead", bhk];
-  if (data.propertyTitle) tags.push("Direct Listing");
+  const propertyNote = data.propertyTitle ? `Selected Home: ${data.propertyTitle}` : "";
+  const dayNote = data.preferredDay ? `Preferred Day: ${data.preferredDay}` : "";
+  const typeNote = data.inquiryType === "callback" ? "Requested Callback" : "Free Site Visit Booking";
+  const utmNotes = [
+    data.utmSource ? `Source: ${data.utmSource}` : "",
+    data.utmMedium ? `Medium: ${data.utmMedium}` : "",
+    data.utmCampaign ? `Campaign: ${data.utmCampaign}` : "",
+  ].filter(Boolean).join(" | ");
+
+  const combinedNotes = [typeNote, propertyNote, dayNote, utmNotes, data.notes]
+    .filter(Boolean)
+    .join(" • ");
+
+  const tags = ["Website", data.inquiryType === "callback" ? "Callback Request" : "Site Visit Request"];
+  if (data.propertyTitle) tags.push(data.propertyTitle);
+  if (data.bhk) tags.push(data.bhk);
 
   const newLead = gharsetuStore.addLead({
     name: cleanName,
-    mobile: cleanMobile,
+    mobile: `+91 ${cleanMobile}`,
     email: data.email || `${cleanName.toLowerCase().replace(/\s+/g, ".")}@gmail.com`,
     bhk,
-    budgetDisplay: data.budgetDisplay || "₹1.2 - ₹1.8 Cr",
+    budgetDisplay: data.budgetDisplay || "₹82 L - ₹1.45 Cr",
     locality,
     city: "Pune",
     source: "Website",
     assignedAgent: "Sameer Khan",
     assignedAgentId: "agent-sameer",
     status: "New",
-    scoreReason: "High-intent web inquiry requesting floor plans on WhatsApp",
-    nextBestAction: "Dispatch verified brochure & floor plans via WhatsApp",
+    scoreReason: "High-intent website lead from landing page with direct home selection",
+    nextBestAction: data.inquiryType === "callback" ? "Call buyer back within 1 hour" : "Confirm private cab slot on WhatsApp",
     tags,
+    notes: combinedNotes,
   });
 
   return {
     success: true,
-    message: "Floor plans and brochures dispatched on WhatsApp!",
+    message: `Thanks, ${cleanName.split(" ")[0]}. Your ${data.inquiryType === "callback" ? "call back" : "visit"} request is noted. We will confirm on WhatsApp.`,
     leadId: newLead.id,
   };
 }

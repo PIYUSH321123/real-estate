@@ -36,6 +36,7 @@ export interface SiteConfig {
     authority: string;
     verificationUrl: string;
     disclaimer: string;
+    propertyIds: Record<string, string>;
   };
   brokerageClaim: {
     badgeText: string;
@@ -70,6 +71,14 @@ export const SITE_CONFIG: SiteConfig = {
     verificationUrl: "https://maharera.mahaonline.gov.in/",
     disclaimer:
       "Gharsetu Realty is a registered real estate agent under MahaRERA Reg. No. A52100029810. Project details, pricing and floor plans displayed are for reference and subject to developer revisions. All agreements comply with MahaRERA guidelines.",
+    propertyIds: {
+      skyline: "P52100024890",
+      green: "P52100031245",
+      orchid: "P52100019876",
+      lake: "P52100041289",
+      metro: "P52100038910",
+      river: "P52100027533",
+    },
   },
   brokerageClaim: {
     badgeText: "0% Buyer Brokerage",
